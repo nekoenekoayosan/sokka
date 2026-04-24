@@ -8,7 +8,7 @@ import QuizArea, { Term } from './components/QuizArea';
 import ChatArea, { Message } from './components/ChatArea';
 
 type Phase = 'input' | 'loading' | 'quiz' | 'chat';
-type InputType = 'text' | 'image' | 'audio';
+type InputType = 'audio' | 'text' | 'url';
 
 const LOADING_STEPS = ['文字起こし中...', '要約中...', '語句を抽出中...'];
 

@@ -42,14 +42,14 @@ export default function VocabularyPage() {
         <h1 className="text-xl font-bold text-[#1A1A1A] mb-6">単語帳</h1>
 
         {/* フィルター */}
-        <div className="flex gap-1 bg-gray-100 rounded-lg p-1 mb-6 w-fit">
+        <div className="flex bg-white rounded-full shadow-sm border border-gray-100 p-1 mb-6 w-fit">
           {filterOptions.map(({ value, label }) => (
             <button
               key={value}
               onClick={() => setFilter(value)}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
                 filter === value
-                  ? 'bg-[#1B4FD8] text-white'
+                  ? 'bg-[#57C0F3] text-white shadow-sm'
                   : 'text-[#888888] hover:text-[#1A1A1A]'
               }`}
             >
@@ -85,10 +85,10 @@ function VocabCard({ item }: { item: VocabItem }) {
         <span className="font-bold text-[#1A1A1A]">{item.term}</span>
         <div className="flex items-center gap-2">
           <span
-            className={`text-xs px-2 py-0.5 rounded-full ${
+            className={`text-xs px-3 py-0.5 rounded-full ${
               item.is_correct
-                ? 'bg-[#F5D000]/20 text-[#B89E00]'
-                : 'bg-[#E05A5A]/10 text-[#E05A5A]'
+                ? 'bg-[#57C0F3]/15 text-[#227298]'
+                : 'bg-[#A72929]/10 text-[#A72929]'
             }`}
           >
             {item.is_correct ? '正解済み' : '要復習'}

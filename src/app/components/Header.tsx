@@ -8,11 +8,17 @@ export default function Header() {
 
   return (
     <header className="bg-[#FFFFFF] border-b border-gray-100 shadow-sm sticky top-0 z-50">
-      <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-        {/* ロゴ */}
-        <Link href="/" className="text-2xl font-bold text-[#F5D000] tracking-tight">
+      <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between relative">
+        {/* ロゴ（中央） */}
+        <Link
+          href="/"
+          className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold text-[#F5D000] tracking-tight"
+        >
           sokka!
         </Link>
+
+        {/* 左の余白（ロゴ中央揃えのため） */}
+        <div />
 
         {/* ハンバーガーメニューボタン */}
         <button
@@ -36,7 +42,6 @@ export default function Header() {
           >
             単語帳閲覧
           </Link>
-          {/* 拡張用 */}
           <div className="px-5 py-3 text-sm text-[#888888]">（今後追加予定）</div>
         </div>
       )}
