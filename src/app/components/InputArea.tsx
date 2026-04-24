@@ -111,23 +111,51 @@ export default function InputArea({ onSubmit, isLoading }: InputAreaProps) {
         )}
 
         {inputType === 'text' && (
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="学習した内容をここに貼り付けてください..."
-            rows={7}
-            className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
-          />
+          <div className="flex flex-col gap-3">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="学習した内容をここに貼り付けてください..."
+              rows={7}
+              className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
+            />
+            <label className="cursor-pointer w-fit">
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => { if (e.target.files?.[0]) setImageFile(e.target.files[0]); }}
+                className="hidden"
+              />
+              <span className="text-xs text-[#227298] hover:opacity-70 transition">
+                {imageFile ? `📎 ${imageFile.name}` : '補足画像を添付する場合はこちら'}
+              </span>
+            </label>
+          </div>
         )}
 
         {inputType === 'url' && (
-          <input
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://..."
-            className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
-          />
+          <div className="flex flex-col gap-3">
+            <input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://..."
+              className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
+            />
+            <label className="cursor-pointer w-fit">
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => { if (e.target.files?.[0]) setImageFile(e.target.files[0]); }}
+                className="hidden"
+              />
+              <span className="text-xs text-[#227298] hover:opacity-70 transition">
+                {imageFile ? `📎 ${imageFile.name}` : '補足画像を添付する場合はこちら'}
+              </span>
+            </label>
+          </div>
         )}
       </div>
 
