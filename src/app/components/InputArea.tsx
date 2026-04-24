@@ -119,7 +119,7 @@ export default function InputArea({ onSubmit, isLoading }: InputAreaProps) {
               rows={7}
               className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
             />
-            <label className="cursor-pointer w-fit">
+            <label className="cursor-pointer mx-auto">
               <input
                 ref={imageInputRef}
                 type="file"
@@ -143,7 +143,7 @@ export default function InputArea({ onSubmit, isLoading }: InputAreaProps) {
               placeholder="https://..."
               className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
             />
-            <label className="cursor-pointer w-fit">
+            <label className="cursor-pointer mx-auto">
               <input
                 ref={imageInputRef}
                 type="file"
