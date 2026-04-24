@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default function Header() {
+interface HeaderProps {
+  onLogoClick?: () => void;
+}
+
+export default function Header({ onLogoClick }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -12,6 +16,7 @@ export default function Header() {
         {/* ロゴ（中央） */}
         <Link
           href="/"
+          onClick={onLogoClick}
           className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold text-[#F5D000] tracking-tight"
         >
           sokka!

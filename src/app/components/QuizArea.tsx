@@ -72,7 +72,7 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave }: QuizAre
       {/* 進捗バー */}
       <div className="w-full h-1 bg-gray-100 rounded-full">
         <div
-          className="h-1 bg-[#1B4FD8] rounded-full transition-all"
+          className="h-1 bg-[#57C0F3] rounded-full transition-all"
           style={{ width: `${((currentIdx + 1) / terms.length) * 100}%` }}
         />
       </div>
@@ -86,13 +86,13 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave }: QuizAre
         <div className="flex items-center gap-2">
           <span
             className={`text-xl font-bold ${
-              current.difficulty === 'hard' ? 'text-[#E05A5A]' : 'text-[#1A1A1A]'
+              current.difficulty === 'hard' ? 'text-[#A72929]' : 'text-[#1A1A1A]'
             }`}
           >
             {current.word}
           </span>
           {current.difficulty === 'hard' && (
-            <span className="text-xs bg-[#E05A5A]/10 text-[#E05A5A] px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-[#A72929]/10 text-[#A72929] px-2 py-0.5 rounded-full">
               難しい用語
             </span>
           )}
@@ -106,12 +106,12 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave }: QuizAre
               onChange={(e) => setAnswer(e.target.value)}
               placeholder="意味を入力する..."
               rows={3}
-              className="w-full rounded-xl border border-gray-200 bg-[#F5F0E8] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#1B4FD8]/30 transition"
+              className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
             />
             <button
               onClick={handleCheck}
               disabled={!answer.trim() || isChecking}
-              className="w-full bg-[#1B4FD8] text-white text-sm font-medium py-3 rounded-xl disabled:opacity-40 hover:bg-[#1541b8] transition-colors"
+              className="w-full bg-[#57C0F3] text-white text-sm font-medium py-3 rounded-full disabled:opacity-40 hover:bg-[#3aaee0] transition-colors"
             >
               {isChecking ? '確認中...' : '答え合わせ'}
             </button>
@@ -129,7 +129,7 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave }: QuizAre
             <RelatedLinks links={result.related_links} />
             <button
               onClick={handleNext}
-              className="w-full bg-[#1B4FD8] text-white text-sm font-medium py-3 rounded-xl hover:bg-[#1541b8] transition-colors"
+              className="w-full bg-[#57C0F3] text-white text-sm font-medium py-3 rounded-full hover:bg-[#3aaee0] transition-colors"
             >
               {isLast ? '会話フェーズへ →' : '次の用語へ →'}
             </button>
@@ -139,14 +139,14 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave }: QuizAre
         {/* 不正解フィードバック */}
         {result && !result.is_correct && (
           <div className="flex flex-col gap-3">
-            <div className="bg-[#E05A5A]/10 border border-[#E05A5A]/30 rounded-xl px-4 py-3">
-              <p className="text-xs font-bold text-[#E05A5A] mb-1">もう一度考えてみよう</p>
+            <div className="bg-[#A72929]/10 border border-[#A72929]/20 rounded-xl px-4 py-3">
+              <p className="text-xs font-bold text-[#A72929] mb-1">もう一度考えてみよう</p>
               <p className="text-sm text-[#1A1A1A]">{result.feedback}</p>
             </div>
             <RelatedLinks links={result.related_links} />
             <button
               onClick={handleRetry}
-              className="w-full border border-[#1B4FD8] text-[#1B4FD8] text-sm font-medium py-3 rounded-xl hover:bg-[#1B4FD8]/5 transition-colors"
+              className="w-full border border-[#57C0F3] text-[#227298] text-sm font-medium py-3 rounded-full hover:bg-[#57C0F3]/5 transition-colors"
             >
               もう一度入力する
             </button>
@@ -168,7 +168,7 @@ function RelatedLinks({ links }: { links: RelatedLink[] }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-[#1B4FD8] underline underline-offset-2 hover:opacity-70 transition-opacity"
+          className="text-xs text-[#227298] underline underline-offset-2 hover:opacity-70 transition-opacity"
         >
           {link.title}
         </a>

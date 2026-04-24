@@ -111,7 +111,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F5F0E8] flex flex-col">
-      <Header />
+      <Header onLogoClick={() => setPhase('input')} />
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
 
         {phase === 'input' && (
