@@ -1,64 +1,149 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import Header from './components/Header';
+import InputArea from './components/InputArea';
+import LoadingScreen from './components/LoadingScreen';
+import QuizArea, { Term } from './components/QuizArea';
+import ChatArea, { Message } from './components/ChatArea';
+
+type Phase = 'input' | 'loading' | 'quiz' | 'chat';
+type InputType = 'audio' | 'text' | 'url';
+
+const LOADING_STEPS = ['文字起こし中...', '要約中...', '語句を抽出中...'];
 
 export default function Home() {
+  const [phase, setPhase] = useState<Phase>('input');
+  const [loadingStatus, setLoadingStatus] = useState(LOADING_STEPS[0]);
+
+  const [terms, setTerms] = useState<Term[]>([]);
+
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [chatTurn, setChatTurn] = useState(0);
+  const [isLastTurn, setIsLastTurn] = useState(false);
+  const [chatSummary, setChatSummary] = useState('');
+  const [chatInput, setChatInput] = useState('');
+  const [isSending, setIsSending] = useState(false);
+
+  // ---- 入力送信 ----
+  const handleSubmit = async (_inputType: InputType, _content: string | File) => {
+    setPhase('loading');
+
+    for (let i = 0; i < LOADING_STEPS.length; i++) {
+      setLoadingStatus(LOADING_STEPS[i]);
+      await new Promise((r) => setTimeout(r, 1200));
+    }
+
+    // モックデータ（後でAPIに差し替え）
+    const mockTerms: Term[] = [
+      { word: 'API', explanation: 'アプリケーション間でデータをやりとりするための取り決め', difficulty: 'easy' },
+      { word: 'コンポーネント', explanation: 'UIを構成する再利用可能な部品', difficulty: 'easy' },
+      { word: 'レンダリング', explanation: 'データをもとにHTMLを生成して画面に表示すること', difficulty: 'hard' },
+    ];
+    setTerms(mockTerms);
+    setPhase('quiz');
+  };
+
+  // ---- 答え合わせ ----
+  const handleCheck = async (term: string, _correctMeaning: string, userAnswer: string) => {
+    await new Promise((r) => setTimeout(r, 800));
+    const isCorrect = userAnswer.length > 5;
+    return {
+      is_correct: isCorrect,
+      feedback: isCorrect
+        ? 'その通りです！正確に理解できています。'
+        : 'もう少し詳しく説明してみてください。キーワードを思い出してみよう。',
+      related_links: [
+        { title: 'MDN Web Docs - ' + term, url: 'https://developer.mozilla.org/ja/' },
+      ],
+    };
+  };
+
+  const handleSave = (_term: string, _meaning: string) => {
+    // 後でAPIに差し替え
+  };
+
+  // ---- クイズ完了 → チャット開始 ----
+  const handleQuizComplete = async () => {
+    setPhase('loading');
+    setLoadingStatus('会話を準備中...');
+    await new Promise((r) => setTimeout(r, 800));
+
+    const firstMessage: Message = {
+      role: 'ai',
+      content: '学習お疲れさまでした！今日学んだ内容について、もう少し深掘りしてみましょう。\n\nAPIとコンポーネントの関係を自分の言葉で説明してみてください。',
+    };
+    setMessages([firstMessage]);
+    setChatTurn(1);
+    setPhase('chat');
+  };
+
+  // ---- チャット送信 ----
+  const handleChatSend = async (text: string) => {
+    if (!text.trim() || isSending) return;
+    setIsSending(true);
+    setChatInput('');
+
+    const userMessage: Message = { role: 'user', content: text };
+    setMessages((prev) => [...prev, userMessage]);
+
+    await new Promise((r) => setTimeout(r, 1000));
+    const nextTurn = chatTurn + 1;
+    const isLast = nextTurn >= 5;
+
+    const aiReply: Message = {
+      role: 'ai',
+      content: isLast
+        ? 'とても良い理解です！今日の学習をしっかり自分のものにできていますね。'
+        : '良い答えです。では次に、実際にどんな場面で使われるか考えてみましょう。',
+    };
+    setMessages((prev) => [...prev, aiReply]);
+    setChatTurn(nextTurn);
+
+    if (isLast) {
+      setIsLastTurn(true);
+      setChatSummary(
+        '今日はAPIとコンポーネントについて学びました。\n・APIはシステム間の橋渡し役\n・コンポーネントはUIの部品単位\nこの2つを組み合わせることでモダンなWebアプリが作れます。'
+      );
+    }
+    setIsSending(false);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="min-h-screen bg-[#F5F0E8] flex flex-col">
+      <Header onLogoClick={() => setPhase('input')} />
+      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
+
+        {phase === 'input' && (
+          <InputArea onSubmit={handleSubmit} isLoading={false} />
+        )}
+
+        {phase === 'loading' && (
+          <LoadingScreen status={loadingStatus} />
+        )}
+
+        {phase === 'quiz' && terms.length > 0 && (
+          <QuizArea
+            terms={terms}
+            onComplete={handleQuizComplete}
+            onCheck={handleCheck}
+            onSave={handleSave}
+          />
+        )}
+
+        {phase === 'chat' && (
+          <ChatArea
+            messages={messages}
+            turn={chatTurn}
+            maxTurns={5}
+            isLast={isLastTurn}
+            summary={chatSummary}
+            onSend={handleChatSend}
+            isSending={isSending}
+            inputValue={chatInput}
+            onInputChange={setChatInput}
+          />
+        )}
       </main>
     </div>
   );
