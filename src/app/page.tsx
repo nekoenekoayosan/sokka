@@ -17,6 +17,7 @@ export default function Home() {
   const [loadingStatus, setLoadingStatus] = useState(LOADING_STEPS[0]);
 
   const [terms, setTerms] = useState<Term[]>([]);
+  const [summaryId, setSummaryId] = useState<string>('');
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatTurn, setChatTurn] = useState(0);
@@ -26,56 +27,100 @@ export default function Home() {
   const [isSending, setIsSending] = useState(false);
 
   // ---- 入力送信 ----
-  const handleSubmit = async (_inputType: InputType, _content: string | File) => {
+  const handleSubmit = async (inputType: InputType, content: string | File) => {
     setPhase('loading');
+    setLoadingStatus(LOADING_STEPS[0]);
 
-    for (let i = 0; i < LOADING_STEPS.length; i++) {
-      setLoadingStatus(LOADING_STEPS[i]);
-      await new Promise((r) => setTimeout(r, 1200));
+    try {
+      const formData = new FormData();
+
+      if (inputType === 'audio' && content instanceof File) {
+        formData.append('input_type', 'audio');
+        formData.append('file', content);
+      } else if (inputType === 'text' && typeof content === 'string') {
+        formData.append('input_type', 'text');
+        formData.append('content', content);
+      } else if (inputType === 'url' && typeof content === 'string') {
+        formData.append('input_type', 'text');
+        formData.append('content', content);
+      }
+
+      setLoadingStatus(LOADING_STEPS[1]);
+
+      const res = await fetch('/api/process', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || '処理に失敗しました');
+      }
+
+      setLoadingStatus(LOADING_STEPS[2]);
+
+      const data = await res.json();
+      setSummaryId(data.summary_id);
+      setTerms(data.terms);
+      setPhase('quiz');
+    } catch (error) {
+      console.error('Process error:', error);
+      alert(error instanceof Error ? error.message : '処理中にエラーが発生しました');
+      setPhase('input');
     }
-
-    // モックデータ（後でAPIに差し替え）
-    const mockTerms: Term[] = [
-      { word: 'API', explanation: 'アプリケーション間でデータをやりとりするための取り決め', difficulty: 'easy' },
-      { word: 'コンポーネント', explanation: 'UIを構成する再利用可能な部品', difficulty: 'easy' },
-      { word: 'レンダリング', explanation: 'データをもとにHTMLを生成して画面に表示すること', difficulty: 'hard' },
-    ];
-    setTerms(mockTerms);
-    setPhase('quiz');
   };
 
   // ---- 答え合わせ ----
-  const handleCheck = async (term: string, _correctMeaning: string, userAnswer: string) => {
-    await new Promise((r) => setTimeout(r, 800));
-    const isCorrect = userAnswer.length > 5;
-    return {
-      is_correct: isCorrect,
-      feedback: isCorrect
-        ? 'その通りです！正確に理解できています。'
-        : 'もう少し詳しく説明してみてください。キーワードを思い出してみよう。',
-      related_links: [
-        { title: 'MDN Web Docs - ' + term, url: 'https://developer.mozilla.org/ja/' },
-      ],
-    };
+  const handleCheck = async (term: string, correctMeaning: string, userAnswer: string) => {
+    const res = await fetch('/api/quiz/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        term,
+        correct_meaning: correctMeaning,
+        user_answer: userAnswer,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error('判定に失敗しました');
+    }
+
+    return await res.json();
   };
 
   const handleSave = (_term: string, _meaning: string) => {
-    // 後でAPIに差し替え
+    // TODO: vocabularyテーブルへの保存
   };
 
   // ---- クイズ完了 → チャット開始 ----
   const handleQuizComplete = async () => {
     setPhase('loading');
     setLoadingStatus('会話を準備中...');
-    await new Promise((r) => setTimeout(r, 800));
 
-    const firstMessage: Message = {
-      role: 'ai',
-      content: '学習お疲れさまでした！今日学んだ内容について、もう少し深掘りしてみましょう。\n\nAPIとコンポーネントの関係を自分の言葉で説明してみてください。',
-    };
-    setMessages([firstMessage]);
-    setChatTurn(1);
-    setPhase('chat');
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          summary_id: summaryId,
+          messages: [],
+          turn: 1,
+        }),
+      });
+
+      if (!res.ok) throw new Error('チャット開始に失敗しました');
+
+      const data = await res.json();
+      const firstMessage: Message = { role: 'ai', content: data.reply };
+      setMessages([firstMessage]);
+      setChatTurn(1);
+      setPhase('chat');
+    } catch (error) {
+      console.error('Chat start error:', error);
+      alert('チャットの開始に失敗しました');
+      setPhase('input');
+    }
   };
 
   // ---- チャット送信 ----
@@ -85,28 +130,39 @@ export default function Home() {
     setChatInput('');
 
     const userMessage: Message = { role: 'user', content: text };
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
 
-    await new Promise((r) => setTimeout(r, 1000));
-    const nextTurn = chatTurn + 1;
-    const isLast = nextTurn >= 5;
+    try {
+      const nextTurn = chatTurn + 1;
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          summary_id: summaryId,
+          messages: updatedMessages,
+          turn: nextTurn,
+        }),
+      });
 
-    const aiReply: Message = {
-      role: 'ai',
-      content: isLast
-        ? 'とても良い理解です！今日の学習をしっかり自分のものにできていますね。'
-        : '良い答えです。では次に、実際にどんな場面で使われるか考えてみましょう。',
-    };
-    setMessages((prev) => [...prev, aiReply]);
-    setChatTurn(nextTurn);
+      if (!res.ok) throw new Error('チャット送信に失敗しました');
 
-    if (isLast) {
-      setIsLastTurn(true);
-      setChatSummary(
-        '今日はAPIとコンポーネントについて学びました。\n・APIはシステム間の橋渡し役\n・コンポーネントはUIの部品単位\nこの2つを組み合わせることでモダンなWebアプリが作れます。'
-      );
+      const data = await res.json();
+      const aiReply: Message = { role: 'ai', content: data.reply };
+      setMessages((prev) => [...prev, aiReply]);
+      setChatTurn(nextTurn);
+
+      if (data.is_last_turn) {
+        setIsLastTurn(true);
+        setChatSummary(data.summary || data.reply);
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage: Message = { role: 'ai', content: 'エラーが発生しました。もう一度お試しください。' };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsSending(false);
     }
-    setIsSending(false);
   };
 
   return (

@@ -5,7 +5,7 @@ import { useState } from 'react';
 export interface Term {
   word: string;
   explanation: string;
-  difficulty: 'easy' | 'hard';
+  difficulty: 'easy' | 'medium' | 'hard';
 }
 
 export interface RelatedLink {
