@@ -10,14 +10,12 @@ import ChatArea, { Message } from './components/ChatArea';
 type Phase = 'input' | 'loading' | 'quiz' | 'chat';
 type InputType = 'audio' | 'text' | 'url';
 
-const LOADING_STEPS = ['文字起こし中...', '要約中...', '語句を抽出中...'];
-
 export default function Home() {
   const [phase, setPhase] = useState<Phase>('input');
-  const [loadingStatus, setLoadingStatus] = useState(LOADING_STEPS[0]);
+  const [loadingStatus, setLoadingStatus] = useState('処理中...');
 
   const [terms, setTerms] = useState<Term[]>([]);
-  const [summaryId, setSummaryId] = useState<string>('');
+  const [summaryId, setSummaryId] = useState<string | null>(null);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatTurn, setChatTurn] = useState(0);
@@ -29,7 +27,11 @@ export default function Home() {
   // ---- 入力送信 ----
   const handleSubmit = async (inputType: InputType, content: string | File) => {
     setPhase('loading');
-    setLoadingStatus(LOADING_STEPS[0]);
+    setLoadingStatus('文字起こし中...');
+
+    // ローディングのステータスを段階的に変化させる
+    const t1 = setTimeout(() => setLoadingStatus('要約中...'), 3000);
+    const t2 = setTimeout(() => setLoadingStatus('語句を抽出中...'), 6000);
 
     try {
       const formData = new FormData();
@@ -45,8 +47,6 @@ export default function Home() {
         formData.append('content', content);
       }
 
-      setLoadingStatus(LOADING_STEPS[1]);
-
       const res = await fetch('/api/process', {
         method: 'POST',
         body: formData,
@@ -57,8 +57,6 @@ export default function Home() {
         throw new Error(err.error || '処理に失敗しました');
       }
 
-      setLoadingStatus(LOADING_STEPS[2]);
-
       const data = await res.json();
       setSummaryId(data.summary_id);
       setTerms(data.terms);
@@ -67,6 +65,9 @@ export default function Home() {
       console.error('Process error:', error);
       alert(error instanceof Error ? error.message : '処理中にエラーが発生しました');
       setPhase('input');
+    } finally {
+      clearTimeout(t1);
+      clearTimeout(t2);
     }
   };
 
@@ -83,7 +84,11 @@ export default function Home() {
     });
 
     if (!res.ok) {
-      throw new Error('判定に失敗しました');
+      return {
+        is_correct: false,
+        feedback: 'エラーが発生しました。もう一度試してください。',
+        related_links: [],
+      };
     }
 
     return await res.json();
@@ -105,7 +110,7 @@ export default function Home() {
         body: JSON.stringify({
           summary_id: summaryId,
           messages: [],
-          turn: 1,
+          turn: 0,
         }),
       });
 
@@ -118,8 +123,13 @@ export default function Home() {
       setPhase('chat');
     } catch (error) {
       console.error('Chat start error:', error);
-      alert('チャットの開始に失敗しました');
-      setPhase('input');
+      // エラー時はフォールバックメッセージで続行
+      setMessages([{
+        role: 'ai',
+        content: '学習お疲れさまでした！今日学んだ内容について、もう少し深掘りしてみましょう。',
+      }]);
+      setChatTurn(1);
+      setPhase('chat');
     }
   };
 
@@ -158,8 +168,10 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Chat error:', error);
-      const errorMessage: Message = { role: 'ai', content: 'エラーが発生しました。もう一度お試しください。' };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'ai', content: 'エラーが発生しました。もう一度お試しください。' },
+      ]);
     } finally {
       setIsSending(false);
     }
