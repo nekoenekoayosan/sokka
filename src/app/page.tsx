@@ -53,8 +53,14 @@ export default function Home() {
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || '処理に失敗しました');
+        let errorMessage = `処理に失敗しました (${res.status})`;
+        try {
+          const err = await res.json();
+          errorMessage = err.error || errorMessage;
+        } catch {
+          // JSONじゃないエラーの場合はステータスコードだけ表示
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
