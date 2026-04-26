@@ -43,7 +43,7 @@ export default function Home() {
         formData.append('input_type', 'text');
         formData.append('content', content);
       } else if (inputType === 'url' && typeof content === 'string') {
-        formData.append('input_type', 'text');
+        formData.append('input_type', 'url');
         formData.append('content', content);
       }
 

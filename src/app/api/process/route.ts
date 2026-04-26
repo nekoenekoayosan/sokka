@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { flashModel } from "@/lib/gemini";
 import { supabase } from "@/lib/supabase";
+import { YoutubeTranscript } from "youtube-transcript";
 
 async function transcribeAudio(file: File): Promise<string> {
   const formData = new FormData();
@@ -22,6 +23,16 @@ async function transcribeAudio(file: File): Promise<string> {
 
   const data = await res.json();
   return data.text;
+}
+
+async function fetchYouTubeTranscript(url: string): Promise<string> {
+  const transcript = await YoutubeTranscript.fetchTranscript(url, {
+    lang: "ja",
+  });
+  if (!transcript || transcript.length === 0) {
+    throw new Error("字幕が取得できませんでした");
+  }
+  return transcript.map((t) => t.text).join(" ");
 }
 
 async function extractTextFromImage(file: File): Promise<string> {
@@ -85,7 +96,16 @@ export async function POST(request: NextRequest) {
       const file = formData.get("file") as File | null;
       const content = formData.get("content") as string | null;
 
-      if (inputType === "text") {
+      if (inputType === "url") {
+        if (!content) {
+          return NextResponse.json(
+            { error: "URLが入力されていません" },
+            { status: 400 }
+          );
+        }
+        fileName = content;
+        transcribedText = await fetchYouTubeTranscript(content);
+      } else if (inputType === "text") {
         if (!content) {
           return NextResponse.json(
             { error: "テキストが入力されていません" },
