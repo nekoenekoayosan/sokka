@@ -3,11 +3,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export const flashModel = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
+  model: "gemini-1.5-flash",
 });
 
 export const proModel = genAI.getGenerativeModel({
-  model: "gemini-2.5-pro",
+  model: "gemini-1.5-pro",
 });
 
 export async function generateWithRetry<T>(
