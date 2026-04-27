@@ -4,25 +4,20 @@ import { supabase } from "@/lib/supabase";
 import { YoutubeTranscript } from "youtube-transcript";
 
 async function transcribeAudio(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("model", "whisper-1");
-  formData.append("language", "ja");
+  const bytes = await file.arrayBuffer();
+  const base64 = Buffer.from(bytes).toString("base64");
 
-  const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+  const result = await flashModel.generateContent([
+    {
+      inlineData: {
+        mimeType: file.type,
+        data: base64,
+      },
     },
-    body: formData,
-  });
+    "この音声の内容をすべて正確に文字起こししてください。日本語で出力してください。句読点や改行も適切に入れてください。文字起こしのみを出力し、他の説明は含めないでください。",
+  ]);
 
-  if (!res.ok) {
-    throw new Error(`Whisper API error: ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.text;
+  return result.response.text();
 }
 
 async function fetchYouTubeTranscript(url: string): Promise<string> {
