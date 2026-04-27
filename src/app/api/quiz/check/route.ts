@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { flashModel } from "@/lib/gemini";
+import { flashModel, generateWithRetry } from "@/lib/gemini";
 
 async function searchRelatedLinks(
   term: string
@@ -55,7 +55,9 @@ export async function POST(request: NextRequest) {
   "feedback": "フィードバックメッセージ（1〜2文）"
 }`;
 
-    const result = await flashModel.generateContent(prompt);
+    const result = await generateWithRetry(() =>
+      flashModel.generateContent(prompt)
+    );
     const responseText = result.response.text();
 
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);

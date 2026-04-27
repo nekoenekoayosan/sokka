@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { flashModel } from "@/lib/gemini";
+import { flashModel, generateWithRetry } from "@/lib/gemini";
 import { supabase } from "@/lib/supabase";
 import { YoutubeTranscript } from "youtube-transcript";
 
@@ -7,15 +7,17 @@ async function transcribeAudio(file: File): Promise<string> {
   const bytes = await file.arrayBuffer();
   const base64 = Buffer.from(bytes).toString("base64");
 
-  const result = await flashModel.generateContent([
-    {
-      inlineData: {
-        mimeType: file.type,
-        data: base64,
+  const result = await generateWithRetry(() =>
+    flashModel.generateContent([
+      {
+        inlineData: {
+          mimeType: file.type,
+          data: base64,
+        },
       },
-    },
-    "この音声の内容をすべて正確に文字起こししてください。日本語で出力してください。句読点や改行も適切に入れてください。文字起こしのみを出力し、他の説明は含めないでください。",
-  ]);
+      "この音声の内容をすべて正確に文字起こししてください。日本語で出力してください。句読点や改行も適切に入れてください。文字起こしのみを出力し、他の説明は含めないでください。",
+    ])
+  );
 
   return result.response.text();
 }
@@ -34,15 +36,17 @@ async function extractTextFromImage(file: File): Promise<string> {
   const bytes = await file.arrayBuffer();
   const base64 = Buffer.from(bytes).toString("base64");
 
-  const result = await flashModel.generateContent([
-    {
-      inlineData: {
-        mimeType: file.type,
-        data: base64,
+  const result = await generateWithRetry(() =>
+    flashModel.generateContent([
+      {
+        inlineData: {
+          mimeType: file.type,
+          data: base64,
+        },
       },
-    },
-    "この画像に含まれるテキストをすべて正確に文字起こししてください。レイアウトや構造もできるだけ保持してください。",
-  ]);
+      "この画像に含まれるテキストをすべて正確に文字起こししてください。レイアウトや構造もできるだけ保持してください。",
+    ])
+  );
 
   return result.response.text();
 }
@@ -67,7 +71,9 @@ ${text}
 
 termsは最大10個まで、テキストの中で特に重要な専門用語や概念を抽出してください。`;
 
-  const result = await flashModel.generateContent(prompt);
+  const result = await generateWithRetry(() =>
+    flashModel.generateContent(prompt)
+  );
   const responseText = result.response.text();
 
   const jsonMatch = responseText.match(/\{[\s\S]*\}/);
