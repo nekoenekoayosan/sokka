@@ -1,16 +1,75 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Header from './components/Header';
 import InputArea from './components/InputArea';
 import LoadingScreen from './components/LoadingScreen';
 import QuizArea, { Term } from './components/QuizArea';
 import ChatArea, { Message } from './components/ChatArea';
 
+const DEMO_TERMS: Term[] = [
+  {
+    word: 'アウトプット',
+    explanation: '学んだ内容を自分の言葉で説明・表現すること',
+    difficulty: 'easy',
+    hint: 'Sokka!が解決しようとしている学習課題のキーワードです',
+  },
+  {
+    word: 'ソクラテス式問答',
+    explanation: '問いかけと対話を通じて理解を深める学習法',
+    difficulty: 'easy',
+    hint: 'Sokka!のチャットフェーズで採用している会話スタイルです',
+  },
+  {
+    word: 'Gemini API',
+    explanation: 'Googleが提供するAIモデルのAPI。要約・採点・チャットに使用される',
+    difficulty: 'hard',
+    hint: 'Sokka!のAI処理全般を担っているGoogleのサービスです',
+  },
+  {
+    word: 'API Routes',
+    explanation: 'Next.jsのサーバーサイド機能。バックエンド処理をフロントエンドと同一リポジトリで管理できる',
+    difficulty: 'hard',
+    hint: 'Sokka!のバックエンドの仕組みに関係しています',
+  },
+  {
+    word: 'Supabase',
+    explanation: 'PostgreSQLベースのデータベースをクラウドで提供するサービス',
+    difficulty: 'hard',
+    hint: 'Sokka!の単語帳データの保存に使われているサービスです',
+  },
+  {
+    word: 'CI/CD',
+    explanation: 'GitHubへのプッシュをトリガーに自動でテスト・デプロイを行う仕組み',
+    difficulty: 'hard',
+    hint: 'Sokka!の開発・運用フローに使われている自動化の仕組みです',
+  },
+];
+
+const DEMO_CHAT = [
+  'お疲れさまでした！Sokka!が解決しようとしている学習上の課題について、自分の言葉で説明してみてください。',
+  'そうですね！受動的なインプットだけでは記憶が定着しにくいという課題でしたね。では、Sokka!はその課題をどのような流れで解決していますか？',
+  '「インプット→理解→定着」のサイクルですね。このうち、Gemini APIはどのフェーズで活躍していると思いますか？',
+  '正解です！AIが要約・採点・チャットの全フェーズを担っているんですね。技術面について、Next.jsとSupabaseはそれぞれ何の役割を担っていますか？',
+  '完璧な理解です！Sokka!はGemini APIで学習内容を自動分析し、クイズとチャットで能動的な定着を促す、まさに現代の学習課題に応えたアプリですね。今日の学習お疲れさまでした！',
+];
+
 type Phase = 'input' | 'loading' | 'quiz' | 'chat';
 type InputType = 'audio' | 'text' | 'url';
 
 export default function Home() {
+  return (
+    <Suspense>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const isDemo = searchParams.get('demo') === 'true';
+
   const [phase, setPhase] = useState<Phase>('input');
   const [loadingStatus, setLoadingStatus] = useState('処理中...');
 
@@ -26,6 +85,19 @@ export default function Home() {
 
   // ---- 入力送信 ----
   const handleSubmit = async (inputType: InputType, content: string | File) => {
+    if (isDemo) {
+      setPhase('loading');
+      setLoadingStatus('文字起こし中...');
+      await new Promise((r) => setTimeout(r, 1500));
+      setLoadingStatus('要約中...');
+      await new Promise((r) => setTimeout(r, 1500));
+      setLoadingStatus('語句を抽出中...');
+      await new Promise((r) => setTimeout(r, 1500));
+      setTerms(DEMO_TERMS);
+      setPhase('quiz');
+      return;
+    }
+
     setPhase('loading');
     setLoadingStatus('文字起こし中...');
 
@@ -79,6 +151,18 @@ export default function Home() {
 
   // ---- 答え合わせ ----
   const handleCheck = async (term: string, correctMeaning: string, userAnswer: string) => {
+    if (isDemo) {
+      await new Promise((r) => setTimeout(r, 800));
+      const isCorrect = userAnswer.length > 10;
+      return {
+        is_correct: isCorrect,
+        feedback: isCorrect
+          ? 'その通りです！しっかり理解できています。'
+          : 'もう少し詳しく説明してみましょう。ヒントを参考にしてみてください。',
+        related_links: [],
+      };
+    }
+
     const res = await fetch('/api/quiz/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,6 +190,16 @@ export default function Home() {
 
   // ---- クイズ完了 → チャット開始 ----
   const handleQuizComplete = async () => {
+    if (isDemo) {
+      setPhase('loading');
+      setLoadingStatus('会話を準備中...');
+      await new Promise((r) => setTimeout(r, 1000));
+      setMessages([{ role: 'ai', content: DEMO_CHAT[0] }]);
+      setChatTurn(1);
+      setPhase('chat');
+      return;
+    }
+
     setPhase('loading');
     setLoadingStatus('会話を準備中...');
 
@@ -141,6 +235,24 @@ export default function Home() {
 
   // ---- チャット送信 ----
   const handleChatSend = async (text: string) => {
+    if (isDemo) {
+      if (!text.trim() || isSending) return;
+      setIsSending(true);
+      setChatInput('');
+      setMessages((prev) => [...prev, { role: 'user', content: text }]);
+      await new Promise((r) => setTimeout(r, 800));
+      const reply = DEMO_CHAT[chatTurn] ?? DEMO_CHAT[DEMO_CHAT.length - 1];
+      const isLast = chatTurn >= 4;
+      setMessages((prev) => [...prev, { role: 'ai', content: reply }]);
+      setChatTurn((prev) => prev + 1);
+      if (isLast) {
+        setIsLastTurn(true);
+        setChatSummary(reply);
+      }
+      setIsSending(false);
+      return;
+    }
+
     if (!text.trim() || isSending) return;
     setIsSending(true);
     setChatInput('');

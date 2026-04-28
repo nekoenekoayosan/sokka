@@ -6,6 +6,7 @@ export interface Term {
   word: string;
   explanation: string;
   difficulty: 'easy' | 'medium' | 'hard';
+  hint?: string;
 }
 
 export interface RelatedLink {
@@ -98,6 +99,10 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, title = '
             </span>
           )}
         </div>
+
+        {current.hint && (
+          <p className="text-sm text-[#888888]">💡 {current.hint}</p>
+        )}
 
         {/* 回答前 */}
         {!result && (
