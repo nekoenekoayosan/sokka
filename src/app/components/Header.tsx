@@ -72,7 +72,13 @@ export default function Header({ onLogoClick }: HeaderProps) {
           >
             単語帳閲覧
           </Link>
-          <div className="px-5 py-3 text-sm text-[#888888]">（今後追加予定）</div>
+          <Link
+            href="/history"
+            className="block px-5 py-3 text-sm text-[#1A1A1A] hover:bg-gray-50 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            学習履歴
+          </Link>
         </div>
       )}
     </header>

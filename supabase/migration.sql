@@ -25,3 +25,22 @@ CREATE TABLE vocabulary (
   is_correct BOOLEAN DEFAULT false,
   saved_at TIMESTAMP DEFAULT now()
 );
+
+-- コース管理
+CREATE TABLE courses (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- チャプター管理
+CREATE TABLE chapters (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  course_id UUID REFERENCES courses(id),
+  day_number INT NOT NULL,
+  title TEXT,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- 要約テーブルにチャプター紐付けを追加
+ALTER TABLE summaries ADD COLUMN chapter_id UUID REFERENCES chapters(id);
