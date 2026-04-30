@@ -23,7 +23,7 @@ export default function Header({ onLogoClick, sunabacoLabel, isSunabaco = false 
           onClick={onLogoClick}
           className="flex flex-col items-center"
         >
-          <Image src={showSunabacoTheme ? '/logo.png' : '/top_logo2.png'} alt="sokka!" height={showSunabacoTheme ? 36 : 56} width={showSunabacoTheme ? 120 : 188} priority />
+          <Image src={showSunabacoTheme ? '/logo.png' : '/top_logo2.png'} alt="sokka!" height={56} width={188} priority />
           {sunabacoLabel && (
             <span className="text-[10px] text-[#57C0F3] font-medium -mt-1">{sunabacoLabel}</span>
           )}
