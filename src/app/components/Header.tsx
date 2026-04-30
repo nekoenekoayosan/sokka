@@ -20,7 +20,7 @@ export default function Header({ onLogoClick }: HeaderProps) {
           onClick={onLogoClick}
           className="absolute left-1/2 -translate-x-1/2"
         >
-          <Image src="/top_logo.png" alt="sokka!" height={44} width={148} priority />
+          <Image src="/logo.png" alt="sokka!" height={44} width={148} priority />
         </Link>
 
         {/* 左の余白（ロゴ中央揃えのため） */}
