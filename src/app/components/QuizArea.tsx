@@ -62,6 +62,16 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
     setResult(null);
   };
 
+  const handleSkip = () => {
+    if (isLast) {
+      onComplete();
+    } else {
+      setCurrentIdx((i) => i + 1);
+      setAnswer('');
+      setResult(null);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {/* ヘッダー */}
@@ -82,9 +92,17 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
           style={{ width: `${((currentIdx + 1) / terms.length) * 100}%` }}
         />
       </div>
-      <p className="text-xs text-[#888888] text-right">
-        {currentIdx + 1} / {terms.length}
-      </p>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={onComplete}
+          className="text-xs text-[#888888] hover:text-[#1A1A1A] transition-colors"
+        >
+          途中保存して会話へ →
+        </button>
+        <p className="text-xs text-[#888888]">
+          {currentIdx + 1} / {terms.length}
+        </p>
+      </div>
 
       {/* 用語カード */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4">
@@ -125,6 +143,12 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
             >
               {isChecking ? '確認中...' : '答え合わせ'}
             </button>
+            <button
+              onClick={handleSkip}
+              className="w-full text-xs text-[#888888] hover:text-[#1A1A1A] transition-colors py-1"
+            >
+              この問題をスキップ →
+            </button>
           </>
         )}
 
@@ -159,6 +183,12 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
               className="w-full border border-[#57C0F3] text-[#227298] text-sm font-medium py-3 rounded-full hover:bg-[#57C0F3]/5 transition-colors"
             >
               もう一度入力する
+            </button>
+            <button
+              onClick={handleSkip}
+              className="w-full text-xs text-[#888888] hover:text-[#1A1A1A] transition-colors py-1"
+            >
+              スキップして次へ →
             </button>
           </div>
         )}
