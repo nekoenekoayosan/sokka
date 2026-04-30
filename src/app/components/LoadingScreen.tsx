@@ -19,24 +19,46 @@ const MOCK_REVIEWS: ReviewQuiz[] = [
   { term: 'レンダリング', meaning: 'データをもとにHTMLを生成して画面に表示すること' },
 ];
 
+const ESTIMATED_SECONDS = 30;
+
 export default function LoadingScreen({ status, reviewQuizzes, onNoteChange }: LoadingScreenProps) {
   const quizzes = reviewQuizzes ?? MOCK_REVIEWS;
   const [currentIdx, setCurrentIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [note, setNote] = useState('');
+  const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     setRevealed(false);
   }, [currentIdx]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setElapsed((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const remaining = Math.max(0, ESTIMATED_SECONDS - elapsed);
+  const progress = Math.min(100, (elapsed / ESTIMATED_SECONDS) * 100);
+
   const quiz = quizzes[currentIdx % quizzes.length];
 
   return (
     <div className="flex flex-col items-center gap-8 py-12">
-      {/* スピナー + ステータス */}
-      <div className="flex flex-col items-center gap-3">
+      {/* スピナー + ステータス + 残り時間 */}
+      <div className="flex flex-col items-center gap-3 w-full">
         <div className="w-10 h-10 rounded-full border-4 border-gray-200 border-t-[#1B4FD8] animate-spin" />
         <p className="text-sm text-[#888888]">{status}</p>
+        <div className="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[#57C0F3] rounded-full transition-all duration-1000"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <p className="text-xs text-[#888888]">
+          {remaining > 0 ? `残り約 ${remaining} 秒` : 'まもなく完了します...'}
+        </p>
       </div>
 
       {/* 自分で学んだことメモ */}
