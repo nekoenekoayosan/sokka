@@ -6,9 +6,10 @@ import { Term } from './QuizArea';
 interface FlashCardReviewProps {
   terms: Term[];
   onStartQuiz: () => void;
+  title?: string;
 }
 
-export default function FlashCardReview({ terms, onStartQuiz }: FlashCardReviewProps) {
+export default function FlashCardReview({ terms, onStartQuiz, title }: FlashCardReviewProps) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reviewed, setReviewed] = useState<Set<number>>(new Set());
@@ -41,7 +42,7 @@ export default function FlashCardReview({ terms, onStartQuiz }: FlashCardReviewP
     <div className="flex flex-col gap-4">
       {/* ヘッダー */}
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold text-[#1A1A1A]">復習フェーズ</h2>
+        <h2 className="text-sm font-bold text-[#1A1A1A]">{title || '復習フェーズ'}</h2>
         <span className="text-xs text-[#888888]">
           カードをタップして意味を確認しよう
         </span>

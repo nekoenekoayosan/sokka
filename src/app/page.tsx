@@ -317,7 +317,7 @@ function HomeContent() {
     : undefined;
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] flex flex-col">
+    <div className={`min-h-screen flex flex-col ${sunabacoLabel ? 'bg-[#E8F0F5]' : 'bg-[#F5F0E8]'}`}>
       <Header
         onLogoClick={() => setPhase(isSunabaco ? 'sunabaco-setup' : 'input')}
         sunabacoLabel={sunabacoLabel}
@@ -335,7 +335,25 @@ function HomeContent() {
         )}
 
         {phase === 'input' && (
-          <InputArea onSubmit={handleSubmit} isLoading={false} />
+          <>
+            {sunabacoConfig && (
+              <div className="bg-[#1A1A1A] rounded-2xl p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-[#57C0F3] font-medium">SUNABACO {sunabacoConfig.course} {sunabacoConfig.period}期</p>
+                  {sunabacoConfig.curriculum && (
+                    <p className="text-sm text-white font-bold mt-0.5">{sunabacoConfig.curriculum}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => setPhase('sunabaco-setup')}
+                  className="text-xs text-[#888888] hover:text-white transition-colors"
+                >
+                  変更
+                </button>
+              </div>
+            )}
+            <InputArea onSubmit={handleSubmit} isLoading={false} />
+          </>
         )}
 
         {phase === 'loading' && (
@@ -343,7 +361,11 @@ function HomeContent() {
         )}
 
         {phase === 'review' && terms.length > 0 && (
-          <FlashCardReview terms={terms} onStartQuiz={() => setPhase('quiz')} />
+          <FlashCardReview
+            terms={terms}
+            onStartQuiz={() => setPhase('quiz')}
+            title={sunabacoConfig?.curriculum ? `復習: ${sunabacoConfig.curriculum}` : undefined}
+          />
         )}
 
         {phase === 'quiz' && showSummary && summaryText && (
@@ -360,6 +382,7 @@ function HomeContent() {
             onCheck={handleCheck}
             onSave={handleSave}
             onSkipToChat={handleQuizComplete}
+            title={sunabacoConfig?.curriculum || 'データの要点'}
           />
         )}
 
