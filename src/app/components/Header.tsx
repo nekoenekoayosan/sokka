@@ -21,7 +21,7 @@ export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
           onClick={onLogoClick}
           className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center"
         >
-          <Image src="/logo.png" alt="sokka!" height={sunabacoLabel ? 36 : 56} width={sunabacoLabel ? 120 : 188} priority />
+          <Image src={sunabacoLabel ? '/logo.png' : '/top_logo2.png'} alt="sokka!" height={sunabacoLabel ? 36 : 56} width={sunabacoLabel ? 120 : 188} priority />
           {sunabacoLabel && (
             <span className="text-[10px] text-[#57C0F3] font-medium -mt-1">{sunabacoLabel}</span>
           )}
