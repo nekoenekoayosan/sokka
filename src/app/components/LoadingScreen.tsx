@@ -10,6 +10,7 @@ interface ReviewQuiz {
 interface LoadingScreenProps {
   status: string;
   reviewQuizzes?: ReviewQuiz[];
+  onNoteChange?: (note: string) => void;
 }
 
 const MOCK_REVIEWS: ReviewQuiz[] = [
@@ -18,10 +19,11 @@ const MOCK_REVIEWS: ReviewQuiz[] = [
   { term: 'レンダリング', meaning: 'データをもとにHTMLを生成して画面に表示すること' },
 ];
 
-export default function LoadingScreen({ status, reviewQuizzes }: LoadingScreenProps) {
+export default function LoadingScreen({ status, reviewQuizzes, onNoteChange }: LoadingScreenProps) {
   const quizzes = reviewQuizzes ?? MOCK_REVIEWS;
   const [currentIdx, setCurrentIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     setRevealed(false);
@@ -35,6 +37,24 @@ export default function LoadingScreen({ status, reviewQuizzes }: LoadingScreenPr
       <div className="flex flex-col items-center gap-3">
         <div className="w-10 h-10 rounded-full border-4 border-gray-200 border-t-[#1B4FD8] animate-spin" />
         <p className="text-sm text-[#888888]">{status}</p>
+      </div>
+
+      {/* 自分で学んだことメモ */}
+      <div className="w-full">
+        <p className="text-xs text-[#888888] text-center mb-3">処理を待つ間に振り返ろう</p>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <p className="text-sm font-bold text-[#1A1A1A] mb-2">自分で学んだこと</p>
+          <textarea
+            value={note}
+            onChange={(e) => {
+              setNote(e.target.value);
+              onNoteChange?.(e.target.value);
+            }}
+            placeholder="今回の学習で気づいたこと、印象に残ったことを自由に書いてみよう..."
+            rows={4}
+            className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
+          />
+        </div>
       </div>
 
       {/* 復習クイズ */}

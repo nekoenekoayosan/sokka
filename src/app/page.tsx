@@ -85,6 +85,7 @@ function HomeContent() {
   const [chatSummary, setChatSummary] = useState('');
   const [chatInput, setChatInput] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [userNote, setUserNote] = useState('');
 
   // ---- 入力送信 ----
   const handleSubmit = async (inputType: InputType, content: string | File, wantSummary: boolean) => {
@@ -312,7 +313,7 @@ function HomeContent() {
         )}
 
         {phase === 'loading' && (
-          <LoadingScreen status={loadingStatus} />
+          <LoadingScreen status={loadingStatus} onNoteChange={setUserNote} />
         )}
 
         {phase === 'review' && terms.length > 0 && (
