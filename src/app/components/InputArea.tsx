@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 type InputType = 'audio' | 'text' | 'url';
 
 interface InputAreaProps {
-  onSubmit: (inputType: InputType, content: string | File) => void;
+  onSubmit: (inputType: InputType, content: string | File, showSummary: boolean) => void;
   isLoading: boolean;
 }
 
@@ -38,13 +38,13 @@ export default function InputArea({ onSubmit, isLoading }: InputAreaProps) {
   const handleSubmit = () => {
     if (inputType === 'text') {
       if (!text.trim()) return;
-      onSubmit('text', text);
+      onSubmit('text', text, showSummary);
     } else if (inputType === 'url') {
       if (!url.trim()) return;
-      onSubmit('url', url);
+      onSubmit('url', url, showSummary);
     } else {
       if (!file) return;
-      onSubmit('audio', file);
+      onSubmit('audio', file, showSummary);
     }
   };
 

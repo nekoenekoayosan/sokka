@@ -75,6 +75,8 @@ function HomeContent() {
 
   const [terms, setTerms] = useState<Term[]>([]);
   const [summaryId, setSummaryId] = useState<string | null>(null);
+  const [summaryText, setSummaryText] = useState('');
+  const [showSummary, setShowSummary] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatTurn, setChatTurn] = useState(0);
@@ -84,7 +86,9 @@ function HomeContent() {
   const [isSending, setIsSending] = useState(false);
 
   // ---- 入力送信 ----
-  const handleSubmit = async (inputType: InputType, content: string | File) => {
+  const handleSubmit = async (inputType: InputType, content: string | File, wantSummary: boolean) => {
+    setShowSummary(wantSummary);
+
     if (isDemo) {
       setPhase('loading');
       setLoadingStatus('文字起こし中...');
@@ -94,6 +98,7 @@ function HomeContent() {
       setLoadingStatus('語句を抽出中...');
       await new Promise((r) => setTimeout(r, 1500));
       setTerms(DEMO_TERMS);
+      setSummaryText('これはデモ用の要約テキストです。Sokka!は学習内容を自動で分析し、クイズとチャットで能動的な定着を促すアプリケーションです。');
       setPhase('quiz');
       return;
     }
@@ -138,6 +143,7 @@ function HomeContent() {
       const data = await res.json();
       setSummaryId(data.summary_id);
       setTerms(data.terms);
+      setSummaryText(data.summary || '');
       setPhase('quiz');
     } catch (error) {
       console.error('Process error:', error);
@@ -306,6 +312,13 @@ function HomeContent() {
 
         {phase === 'loading' && (
           <LoadingScreen status={loadingStatus} />
+        )}
+
+        {phase === 'quiz' && showSummary && summaryText && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h2 className="text-sm font-bold text-[#1A1A1A] mb-3">要約</h2>
+            <p className="text-sm text-[#1A1A1A] leading-relaxed whitespace-pre-wrap">{summaryText}</p>
+          </div>
         )}
 
         {phase === 'quiz' && terms.length > 0 && (
