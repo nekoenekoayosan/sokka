@@ -35,10 +35,26 @@ export default function SunabacoSetup({ onConfirm, initialConfig }: SunabacoSetu
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      {/* SUNABACOヘッダー */}
+      {/* SUNABACO紹介セクション */}
+      <div className="bg-[#1A1A1A] rounded-2xl p-6 flex flex-col gap-3">
+        <p className="text-xs text-[#57C0F3] font-medium tracking-widest">Technology & Business</p>
+        <h2 className="text-lg font-bold text-white leading-snug">
+          SUNABACOは、<br />あなたのビジネスを加速する<br />ビジネススクールです。
+        </h2>
+        <p className="text-sm text-[#CCCCCC] leading-relaxed">
+          よくあるエンジニア育成を目的にしたプログラミングスクールではありません。マーケティング、デザイン、組織運営、ビジネスに必要な技術を体系的に学べます。
+        </p>
+        <div className="flex flex-wrap gap-2 mt-1">
+          {COURSES.map((c) => (
+            <span key={c} className="text-[10px] text-[#888888] bg-[#2A2A2A] px-2.5 py-1 rounded-full">{c}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* 学習設定 */}
       <div className="text-center">
-        <h2 className="text-lg font-bold text-[#1A1A1A]">SUNABACO学習モード</h2>
-        <p className="text-xs text-[#888888] mt-1">コースと期を選択して学習を始めましょう</p>
+        <h3 className="text-sm font-bold text-[#1A1A1A]">学習を始める</h3>
+        <p className="text-xs text-[#888888] mt-1">コースと期を選択してください</p>
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col gap-4">
