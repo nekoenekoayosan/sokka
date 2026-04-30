@@ -2,17 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-
-
-function SokkaLogo() {
-  return (
-    <span className="flex items-center" style={{ fontFamily: "'Lilita One', cursive", fontSize: '36px', color: '#F5D000', lineHeight: 1 }}>
-      <span>s</span>
-      <img src="/logo.png" alt="o" style={{ width: '34px', height: '34px', display: 'inline-block', verticalAlign: 'middle', margin: '0 -1px' }} />
-      <span>kka!</span>
-    </span>
-  );
-}
+import Image from 'next/image';
 
 interface HeaderProps {
   onLogoClick?: () => void;
@@ -30,7 +20,7 @@ export default function Header({ onLogoClick }: HeaderProps) {
           onClick={onLogoClick}
           className="absolute left-1/2 -translate-x-1/2"
         >
-          <SokkaLogo />
+          <Image src="/top_logo.png" alt="sokka!" height={44} width={148} priority />
         </Link>
 
         {/* 左の余白（ロゴ中央揃えのため） */}
