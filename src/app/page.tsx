@@ -8,6 +8,7 @@ import LoadingScreen from './components/LoadingScreen';
 import QuizArea, { Term } from './components/QuizArea';
 import FlashCardReview from './components/FlashCardReview';
 import ChatArea, { Message } from './components/ChatArea';
+import SunabacoSetup, { SunabacoConfig } from './components/SunabacoSetup';
 
 const DEMO_TERMS: Term[] = [
   {
@@ -62,7 +63,7 @@ const DEMO_CHAT = [
   '完璧な理解です！Sokka!はGemini APIで学習内容を自動分析し、クイズとチャットで能動的な定着を促す、まさに現代の学習課題に応えたアプリですね。今日の学習お疲れさまでした！',
 ];
 
-type Phase = 'input' | 'loading' | 'review' | 'quiz' | 'chat';
+type Phase = 'sunabaco-setup' | 'input' | 'loading' | 'review' | 'quiz' | 'chat';
 type InputType = 'audio' | 'text' | 'url';
 
 export default function Home() {
@@ -76,9 +77,11 @@ export default function Home() {
 function HomeContent() {
   const searchParams = useSearchParams();
   const isDemo = searchParams.get('demo') === 'true';
+  const isSunabaco = searchParams.get('sunabaco') === 'true';
 
-  const [phase, setPhase] = useState<Phase>('input');
+  const [phase, setPhase] = useState<Phase>(isSunabaco ? 'sunabaco-setup' : 'input');
   const [loadingStatus, setLoadingStatus] = useState('処理中...');
+  const [sunabacoConfig, setSunabacoConfig] = useState<SunabacoConfig | null>(null);
 
   const [terms, setTerms] = useState<Term[]>([]);
   const [summaryId, setSummaryId] = useState<string | null>(null);
@@ -309,10 +312,27 @@ function HomeContent() {
     }
   };
 
+  const sunabacoLabel = sunabacoConfig
+    ? `${sunabacoConfig.course} ${sunabacoConfig.period}期${sunabacoConfig.curriculum ? ` / ${sunabacoConfig.curriculum}` : ''}`
+    : undefined;
+
   return (
     <div className="min-h-screen bg-[#F5F0E8] flex flex-col">
-      <Header onLogoClick={() => setPhase('input')} />
+      <Header
+        onLogoClick={() => setPhase(isSunabaco ? 'sunabaco-setup' : 'input')}
+        sunabacoLabel={sunabacoLabel}
+      />
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
+
+        {phase === 'sunabaco-setup' && (
+          <SunabacoSetup
+            initialConfig={sunabacoConfig}
+            onConfirm={(config) => {
+              setSunabacoConfig(config);
+              setPhase('input');
+            }}
+          />
+        )}
 
         {phase === 'input' && (
           <InputArea onSubmit={handleSubmit} isLoading={false} />

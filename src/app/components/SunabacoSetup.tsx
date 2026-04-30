@@ -1,0 +1,98 @@
+'use client';
+
+import { useState } from 'react';
+
+const COURSES = [
+  'プログラミング',
+  'DX人材育成講座',
+  'AI人材育成講座',
+  'デザインコース',
+  'WEBデザインコース',
+  'Word Pressコース',
+  'LP基礎コース',
+  'デジタルマーケティングコース',
+  'キッズプログラミング',
+  'ECマスターコース',
+] as const;
+
+export interface SunabacoConfig {
+  course: string;
+  period: string;
+  curriculum: string;
+}
+
+interface SunabacoSetupProps {
+  onConfirm: (config: SunabacoConfig) => void;
+  initialConfig?: SunabacoConfig | null;
+}
+
+export default function SunabacoSetup({ onConfirm, initialConfig }: SunabacoSetupProps) {
+  const [course, setCourse] = useState(initialConfig?.course || '');
+  const [period, setPeriod] = useState(initialConfig?.period || '');
+  const [curriculum, setCurriculum] = useState(initialConfig?.curriculum || '');
+
+  const canSubmit = course && period.trim();
+
+  return (
+    <div className="flex flex-col gap-5 w-full">
+      {/* SUNABACOヘッダー */}
+      <div className="text-center">
+        <h2 className="text-lg font-bold text-[#1A1A1A]">SUNABACO学習モード</h2>
+        <p className="text-xs text-[#888888] mt-1">コースと期を選択して学習を始めましょう</p>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col gap-4">
+        {/* コース選択 */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#1A1A1A]">コース</label>
+          <select
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+            className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none appearance-none"
+          >
+            <option value="">コースを選択してください</option>
+            {COURSES.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* 期数入力 */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#1A1A1A]">期</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
+              placeholder="52"
+              min="1"
+              className="w-24 rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
+            />
+            <span className="text-sm text-[#1A1A1A]">期</span>
+          </div>
+        </div>
+
+        {/* カリキュラム入力 */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-[#1A1A1A]">カリキュラム（今日の学習テーマ）</label>
+          <input
+            type="text"
+            value={curriculum}
+            onChange={(e) => setCurriculum(e.target.value)}
+            placeholder="例: バージョン管理について"
+            className="w-full rounded-xl bg-[#F3FBFF] px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition border-none"
+          />
+        </div>
+      </div>
+
+      <button
+        onClick={() => canSubmit && onConfirm({ course, period, curriculum })}
+        disabled={!canSubmit}
+        className="mx-auto px-12 bg-[#1A1A1A] text-white text-sm font-medium py-3 rounded-full disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#333] transition-colors shadow-sm"
+      >
+        この設定で学習を始める
+      </button>
+    </div>
+  );
+}
