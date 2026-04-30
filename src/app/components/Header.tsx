@@ -14,12 +14,12 @@ export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
 
   return (
     <header className={`border-b shadow-sm sticky top-0 z-50 ${sunabacoLabel ? 'bg-[#1A1A1A]' : 'bg-[#FFFFFF] border-gray-100'}`}>
-      <div className="max-w-2xl mx-auto px-4 h-[65px] flex items-center justify-between relative">
+      <div className="px-4 h-[65px] flex items-center justify-center relative">
         {/* ロゴ（中央） */}
         <Link
           href="/"
           onClick={onLogoClick}
-          className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center"
+          className="flex flex-col items-center"
         >
           <Image src={sunabacoLabel ? '/logo.png' : '/top_logo2.png'} alt="sokka!" height={sunabacoLabel ? 36 : 56} width={sunabacoLabel ? 120 : 188} priority />
           {sunabacoLabel && (
@@ -27,13 +27,10 @@ export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
           )}
         </Link>
 
-        {/* 左の余白（ロゴ中央揃えのため） */}
-        <div />
-
-        {/* ハンバーガーメニューボタン */}
+        {/* ハンバーガーメニューボタン（右端固定） */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="flex flex-col gap-1.5 p-2 rounded-md hover:bg-gray-50 transition-colors"
+          className="absolute right-4 flex flex-col gap-1.5 p-2 rounded-md hover:bg-gray-50 transition-colors"
           aria-label="メニューを開く"
         >
           <span className={`block w-5 h-0.5 ${sunabacoLabel ? 'bg-white' : 'bg-[#1A1A1A]'} transition-transform origin-center ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
