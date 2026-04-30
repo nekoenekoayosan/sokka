@@ -35,24 +35,6 @@ export default function SunabacoSetup({ onConfirm, initialConfig }: SunabacoSetu
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      {/* SUNABACO紹介セクション */}
-      <div className="bg-[#1A1A1A] rounded-2xl p-6 flex flex-col gap-3">
-        <p className="text-xs text-[#57C0F3] font-medium tracking-widest">Technology & Business</p>
-        <h2 className="text-lg font-bold text-white leading-snug">
-          SUNABACOとは？
-        </h2>
-        <p className="text-base font-bold text-[#F5D000] mt-2">日本最大級のビジネススクール</p>
-        <p className="text-sm text-white">ありとあらゆるコースがあり、あなたのビジネスを加速します！</p>
-        <p className="text-sm text-[#CCCCCC] leading-relaxed">
-          よくあるエンジニア育成を目的にしたプログラミングスクールではありません。マーケティング、デザイン、組織運営、ビジネスに必要な技術を体系的に学べます。
-        </p>
-        <div className="flex flex-wrap gap-2 mt-1">
-          {COURSES.map((c) => (
-            <span key={c} className="text-[10px] text-[#888888] bg-[#2A2A2A] px-2.5 py-1 rounded-full">{c}</span>
-          ))}
-        </div>
-      </div>
-
       {/* 学習設定 */}
       <div className="text-center">
         <h3 className="text-sm font-bold text-[#1A1A1A]">学習を始める</h3>
@@ -111,6 +93,24 @@ export default function SunabacoSetup({ onConfirm, initialConfig }: SunabacoSetu
       >
         この設定で学習を始める
       </button>
+
+      {/* SUNABACO紹介セクション */}
+      <div className="bg-[#1A1A1A] rounded-2xl p-6 flex flex-col gap-3">
+        <p className="text-xs text-[#57C0F3] font-medium tracking-widest">Technology & Business</p>
+        <h2 className="text-lg font-bold text-white leading-snug">
+          SUNABACOとは？
+        </h2>
+        <p className="text-base font-bold text-[#F5D000] mt-2">日本最大級のビジネススクール</p>
+        <p className="text-sm text-white">ありとあらゆるコースがあり、あなたのビジネスを加速します！</p>
+        <p className="text-sm text-[#CCCCCC] leading-relaxed">
+          よくあるエンジニア育成を目的にしたプログラミングスクールではありません。マーケティング、デザイン、組織運営、ビジネスに必要な技術を体系的に学べます。
+        </p>
+        <div className="flex flex-wrap gap-2 mt-1">
+          {COURSES.map((c) => (
+            <span key={c} className="text-[10px] text-[#888888] bg-[#2A2A2A] px-2.5 py-1 rounded-full">{c}</span>
+          ))}
+        </div>
+      </div>
 
       {/* SUNABACOリンク */}
       <div className="grid grid-cols-2 gap-3 mt-2">
