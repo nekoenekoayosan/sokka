@@ -39,8 +39,10 @@ export default function SunabacoSetup({ onConfirm, initialConfig }: SunabacoSetu
       <div className="bg-[#1A1A1A] rounded-2xl p-6 flex flex-col gap-3">
         <p className="text-xs text-[#57C0F3] font-medium tracking-widest">Technology & Business</p>
         <h2 className="text-lg font-bold text-white leading-snug">
-          SUNABACOは、<br />あなたのビジネスを加速する<br />ビジネススクールです。
+          SUNABACOとは？
         </h2>
+        <p className="text-base font-bold text-[#F5D000] mt-2">日本最大級のビジネススクール</p>
+        <p className="text-sm text-white">ありとあらゆるコースがあり、あなたのビジネスを加速します！</p>
         <p className="text-sm text-[#CCCCCC] leading-relaxed">
           よくあるエンジニア育成を目的にしたプログラミングスクールではありません。マーケティング、デザイン、組織運営、ビジネスに必要な技術を体系的に学べます。
         </p>
