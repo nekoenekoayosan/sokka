@@ -7,6 +7,7 @@ export interface Term {
   explanation: string;
   difficulty: 'easy' | 'medium' | 'hard';
   hint?: string;
+  trivia?: string;
 }
 
 export interface RelatedLink {
@@ -160,6 +161,12 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
               <p className="text-sm text-[#1A1A1A]">{result.feedback}</p>
             </div>
             <p className="text-xs text-[#888888]">✓ 単語帳に保存しました</p>
+            {current.trivia && (
+              <div className="bg-[#F3FBFF] rounded-xl px-4 py-3">
+                <p className="text-xs font-bold text-[#227298] mb-1">豆知識</p>
+                <p className="text-sm text-[#1A1A1A]">{current.trivia}</p>
+              </div>
+            )}
             <RelatedLinks links={result.related_links} />
             <button
               onClick={handleNext}

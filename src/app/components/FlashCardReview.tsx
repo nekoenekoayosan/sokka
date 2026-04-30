@@ -83,6 +83,9 @@ export default function FlashCardReview({ terms, onStartQuiz }: FlashCardReviewP
               {current.hint && (
                 <p className="text-xs text-[#888888] mt-3">💡 {current.hint}</p>
               )}
+              {current.trivia && (
+                <p className="text-xs text-[#227298] mt-2 bg-[#F3FBFF] rounded-lg px-3 py-2">豆知識: {current.trivia}</p>
+              )}
             </>
           )}
         </div>

@@ -15,36 +15,42 @@ const DEMO_TERMS: Term[] = [
     explanation: '学んだ内容を自分の言葉で説明・表現すること',
     difficulty: 'easy',
     hint: 'Sokka!が解決しようとしている学習課題のキーワードです',
+    trivia: '「ラーニングピラミッド」によると、人に教えることで記憶定着率は90%に達するとされています',
   },
   {
     word: 'ソクラテス式問答',
     explanation: '問いかけと対話を通じて理解を深める学習法',
     difficulty: 'easy',
     hint: 'Sokka!のチャットフェーズで採用している会話スタイルです',
+    trivia: '古代ギリシャの哲学者ソクラテスは自分では一冊も本を書かず、すべて弟子プラトンが記録しました',
   },
   {
     word: 'Gemini API',
     explanation: 'Googleが提供するAIモデルのAPI。要約・採点・チャットに使用される',
     difficulty: 'hard',
     hint: 'Sokka!のAI処理全般を担っているGoogleのサービスです',
+    trivia: 'Geminiはラテン語で「双子」を意味し、テキストと画像の両方を扱えることに由来します',
   },
   {
     word: 'API Routes',
     explanation: 'Next.jsのサーバーサイド機能。バックエンド処理をフロントエンドと同一リポジトリで管理できる',
     difficulty: 'hard',
     hint: 'Sokka!のバックエンドの仕組みに関係しています',
+    trivia: 'Next.jsはVercel社が開発し、2016年に初版がリリースされました',
   },
   {
     word: 'Supabase',
     explanation: 'PostgreSQLベースのデータベースをクラウドで提供するサービス',
     difficulty: 'hard',
     hint: 'Sokka!の単語帳データの保存に使われているサービスです',
+    trivia: 'Supabaseは「Firebaseのオープンソース代替」として2020年に誕生しました',
   },
   {
     word: 'CI/CD',
     explanation: 'GitHubへのプッシュをトリガーに自動でテスト・デプロイを行う仕組み',
     difficulty: 'hard',
     hint: 'Sokka!の開発・運用フローに使われている自動化の仕組みです',
+    trivia: 'CI/CDの概念は2000年代初頭のアジャイル開発の普及とともに広まりました',
   },
 ];
 

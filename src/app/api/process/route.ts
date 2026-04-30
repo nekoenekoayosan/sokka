@@ -64,12 +64,14 @@ ${text}
     {
       "word": "重要な用語",
       "explanation": "その用語の正確な意味（50字以内）",
-      "difficulty": "easy | medium | hard"
+      "difficulty": "easy | medium | hard",
+      "trivia": "その用語に関連する面白い雑学や豆知識（60字以内）"
     }
   ]
 }
 
-termsは最大10個まで、テキストの中で特に重要な専門用語や概念を抽出してください。`;
+termsは最大10個まで、テキストの中で特に重要な専門用語や概念を抽出してください。
+triviaには、学習者が興味を持つような意外な事実や歴史的背景などを含めてください。`;
 
   const result = await generateWithRetry(() =>
     flashModel.generateContent(prompt)
@@ -183,6 +185,7 @@ export async function POST(request: NextRequest) {
       file_id: fileRecord.id,
       transcribed_text: transcribedText,
       summary_id: summaryRecord.id,
+      summary,
       terms,
     });
   } catch (error) {
