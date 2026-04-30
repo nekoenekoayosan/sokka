@@ -183,7 +183,6 @@ export async function POST(request: NextRequest) {
       file_id: fileRecord.id,
       transcribed_text: transcribedText,
       summary_id: summaryRecord.id,
-      summary,
       terms,
     });
   } catch (error) {

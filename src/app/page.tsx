@@ -6,6 +6,7 @@ import Header from './components/Header';
 import InputArea from './components/InputArea';
 import LoadingScreen from './components/LoadingScreen';
 import QuizArea, { Term } from './components/QuizArea';
+import FlashCardReview from './components/FlashCardReview';
 import ChatArea, { Message } from './components/ChatArea';
 
 const DEMO_TERMS: Term[] = [
@@ -55,7 +56,7 @@ const DEMO_CHAT = [
   '完璧な理解です！Sokka!はGemini APIで学習内容を自動分析し、クイズとチャットで能動的な定着を促す、まさに現代の学習課題に応えたアプリですね。今日の学習お疲れさまでした！',
 ];
 
-type Phase = 'input' | 'loading' | 'quiz' | 'chat';
+type Phase = 'input' | 'loading' | 'review' | 'quiz' | 'chat';
 type InputType = 'audio' | 'text' | 'url';
 
 export default function Home() {
@@ -99,7 +100,7 @@ function HomeContent() {
       await new Promise((r) => setTimeout(r, 1500));
       setTerms(DEMO_TERMS);
       setSummaryText('これはデモ用の要約テキストです。Sokka!は学習内容を自動で分析し、クイズとチャットで能動的な定着を促すアプリケーションです。');
-      setPhase('quiz');
+      setPhase('review');
       return;
     }
 
@@ -144,7 +145,7 @@ function HomeContent() {
       setSummaryId(data.summary_id);
       setTerms(data.terms);
       setSummaryText(data.summary || '');
-      setPhase('quiz');
+      setPhase('review');
     } catch (error) {
       console.error('Process error:', error);
       alert(error instanceof Error ? error.message : '処理中にエラーが発生しました');
@@ -312,6 +313,10 @@ function HomeContent() {
 
         {phase === 'loading' && (
           <LoadingScreen status={loadingStatus} />
+        )}
+
+        {phase === 'review' && terms.length > 0 && (
+          <FlashCardReview terms={terms} onStartQuiz={() => setPhase('quiz')} />
         )}
 
         {phase === 'quiz' && showSummary && summaryText && (
