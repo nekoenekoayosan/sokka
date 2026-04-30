@@ -6,7 +6,7 @@ const MAX_TURNS = 5;
 
 export async function POST(request: NextRequest) {
   try {
-    const { summary_id, messages, turn } = await request.json();
+    const { summary_id, messages, turn, is_sunabaco } = await request.json();
 
     if (!summary_id || turn === undefined) {
       return NextResponse.json(
@@ -31,20 +31,31 @@ export async function POST(request: NextRequest) {
 
     const isLastTurn = turn >= MAX_TURNS;
 
-    const systemPrompt = `あなたは優しくて知識豊富な先生です。以下の学習内容について、生徒と対話しながら理解を深める手助けをしてください。
-
-【学習内容の要約】
+    const baseContext = `【学習内容の要約】
 ${summaryData.summary}
 
 【重要用語】
-${JSON.stringify(summaryData.terms, null, 2)}
+${JSON.stringify(summaryData.terms, null, 2)}`;
 
-ルール：
+    const normalRules = `ルール：
 - 生徒の理解度に合わせて質問してください
 - 一度に聞く質問は1つだけにしてください
 - 具体例を交えてわかりやすく説明してください
 - 褒めるところは褒めてください
 ${isLastTurn ? "- これが最後のターンです。会話のまとめを生成してください。学習した内容のポイントを整理し、今後の学習へのアドバイスを含めてください。" : ""}`;
+
+    const sunabacoRules = `ルール：
+- 暗記確認ではなく「なぜそうなのか」「どう使うのか」を深掘りしてください
+- 学習者の回答内容に具体的に触れてフィードバックしてください。テンプレ的な「素晴らしい！」だけで終わらないでください
+- 関連する実務事例や面白い雑学を1つ盛り込んでください
+- 「自分から調べてみたくなる」ような問いかけで締めてください
+- 一度に聞く質問は1つだけにしてください
+- ビジネスや実務での活用シーンを意識した会話を心がけてください
+${isLastTurn ? "- これが最後のターンです。会話のまとめを生成してください。学んだ内容が実務でどう活きるかを整理し、さらに深掘りしたくなるような次のアクションを提案してください。" : ""}`;
+
+    const systemPrompt = is_sunabaco
+      ? `あなたはSUNABACOの実践的なメンターです。受講生と対話しながら、学んだ知識を「使える力」に変える手助けをしてください。表面的な理解で終わらせず、本質的な理解と応用力を引き出してください。\n\n${baseContext}\n\n${sunabacoRules}`
+      : `あなたは優しくて知識豊富な先生です。以下の学習内容について、生徒と対話しながら理解を深める手助けをしてください。\n\n${baseContext}\n\n${normalRules}`;
 
     const chatHistory = (messages || []).map(
       (msg: { role: string; content: string }) => ({
