@@ -13,7 +13,7 @@ export default function MainPage() {
 
         {/* ロゴ */}
         <div className="flex flex-col items-center gap-2">
-          <Image src="/logo.png" alt="sokka!" height={80} width={268} priority />
+          <Image src="/top_logo2.png" alt="sokka!" height={80} width={268} priority />
           <p className="text-sm text-[#888888]">学んだことを、自分のものにする</p>
         </div>
 
