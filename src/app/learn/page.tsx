@@ -62,6 +62,8 @@ const DEMO_CHAT = [
   '完璧な理解です！Sokka!はGemini APIで学習内容を自動分析し、クイズとチャットで能動的な定着を促す、まさに現代の学習課題に応えたアプリですね。今日の学習お疲れさまでした！',
 ];
 
+const DEMO_SUMMARY = 'Sokka!の設計原理はラーニングピラミッドとソクラテス式問答にあります。AIが答えを教えるのではなく問いかけることで、能動的なアウトプットを促し記憶定着率を高めます。今日の学びをきっかけに、生成AIと学習の関係をさらに探求してみてください。';
+
 type Phase = 'input' | 'loading' | 'review' | 'quiz' | 'chat';
 type InputType = 'audio' | 'text' | 'url';
 
@@ -255,7 +257,7 @@ function LearnContent() {
       setChatTurn((prev) => prev + 1);
       if (isLast) {
         setIsLastTurn(true);
-        setChatSummary(reply);
+        setChatSummary(DEMO_SUMMARY);
       }
       setIsSending(false);
       return;

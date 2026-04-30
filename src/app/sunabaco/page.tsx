@@ -37,6 +37,8 @@ const DEMO_CHAT = [
   '素晴らしい！今日の学習お疲れさまでした！',
 ];
 
+const DEMO_SUMMARY = 'Sokka!の設計原理はラーニングピラミッドとソクラテス式問答にあります。AIが答えを教えるのではなく問いかけることで、能動的なアウトプットを促し記憶定着率を高めます。今日の学びをきっかけに、生成AIと学習の関係をさらに探求してみてください。';
+
 type Phase = 'setup' | 'input' | 'loading' | 'review' | 'quiz' | 'chat';
 type InputType = 'audio' | 'text' | 'url';
 
@@ -209,7 +211,7 @@ function SunabacoContent() {
       const isLast = chatTurn >= 2;
       setMessages((prev) => [...prev, { role: 'ai', content: reply }]);
       setChatTurn((prev) => prev + 1);
-      if (isLast) { setIsLastTurn(true); setChatSummary(reply); }
+      if (isLast) { setIsLastTurn(true); setChatSummary(DEMO_SUMMARY); }
       setIsSending(false);
       return;
     }
