@@ -2,29 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+
 
 function SokkaLogo() {
   return (
-    <svg width="120" height="42" viewBox="0 0 120 42" xmlns="http://www.w3.org/2000/svg">
-      <text
-        x="0" y="36"
-        fontFamily="'Lilita One', cursive"
-        fontSize="40"
-        fill="#F5D000"
-      >
-        sokka!
-      </text>
-      {/* oの中のスコップアイコン（oはx約18付近、幅約24px、中心x約30） */}
-      <g transform="translate(36, 5)">
-        {/* 柄（グリップ付き） */}
-        <rect x="5.5" y="0" width="4" height="14" rx="2" fill="white" />
-        {/* グリップ（T字） */}
-        <rect x="1" y="0" width="13" height="4" rx="2" fill="white" />
-        {/* ブレード（丸みのあるスコップ頭） */}
-        <path d="M2 14 Q2 26 7.5 26 Q13 26 13 14 Z" fill="white" />
-      </g>
-    </svg>
+    <span className="flex items-center" style={{ fontFamily: "'Lilita One', cursive", fontSize: '36px', color: '#F5D000', lineHeight: 1 }}>
+      <span>s</span>
+      <img src="/logo.png" alt="o" style={{ width: '34px', height: '34px', display: 'inline-block', verticalAlign: 'middle', margin: '0 -1px' }} />
+      <span>kka!</span>
+    </span>
   );
 }
 
@@ -44,7 +30,7 @@ export default function Header({ onLogoClick }: HeaderProps) {
           onClick={onLogoClick}
           className="absolute left-1/2 -translate-x-1/2"
         >
-          <Image src="/top_logo.png" alt="sokka!" height={44} width={148} priority />
+          <SokkaLogo />
         </Link>
 
         {/* 左の余白（ロゴ中央揃えのため） */}
