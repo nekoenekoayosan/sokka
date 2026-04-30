@@ -332,6 +332,7 @@ function HomeContent() {
             onComplete={handleQuizComplete}
             onCheck={handleCheck}
             onSave={handleSave}
+            onSkipToChat={handleQuizComplete}
           />
         )}
 

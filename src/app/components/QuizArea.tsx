@@ -25,10 +25,11 @@ interface QuizAreaProps {
   onComplete: () => void;
   onCheck: (term: string, correctMeaning: string, userAnswer: string) => Promise<CheckResult>;
   onSave: (term: string, meaning: string) => void;
+  onSkipToChat?: () => void;
   title?: string;
 }
 
-export default function QuizArea({ terms, onComplete, onCheck, onSave, title = 'データの要点' }: QuizAreaProps) {
+export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToChat, title = 'データの要点' }: QuizAreaProps) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState<CheckResult | null>(null);
@@ -66,9 +67,12 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, title = '
       {/* ヘッダー */}
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-bold text-[#1A1A1A]">{title}</h2>
-        <span className="text-xs text-[#888888]">
-          ？ わからないときはAIに聞いてみよう
-        </span>
+        <button
+          onClick={onSkipToChat}
+          className="text-xs text-[#227298] hover:opacity-70 transition-opacity"
+        >
+          ？ わからないときはAIに聞いてみよう →
+        </button>
       </div>
 
       {/* 進捗バー */}
