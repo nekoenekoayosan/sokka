@@ -7,13 +7,15 @@ import Image from 'next/image';
 interface HeaderProps {
   onLogoClick?: () => void;
   sunabacoLabel?: string;
+  isSunabaco?: boolean;
 }
 
-export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
+export default function Header({ onLogoClick, sunabacoLabel, isSunabaco = false }: HeaderProps) {
+  const showSunabacoTheme = isSunabaco || !!sunabacoLabel;
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className={`border-b shadow-sm sticky top-0 z-50 ${sunabacoLabel ? 'bg-[#1A1A1A]' : 'bg-[#FFFFFF] border-gray-100'}`}>
+    <header className={`border-b shadow-sm sticky top-0 z-50 ${showSunabacoTheme ? 'bg-[#1A1A1A]' : 'bg-[#FFFFFF] border-gray-100'}`}>
       <div className="px-4 h-[65px] flex items-center justify-center relative">
         {/* ロゴ（中央） */}
         <Link
@@ -21,7 +23,7 @@ export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
           onClick={onLogoClick}
           className="flex flex-col items-center"
         >
-          <Image src={sunabacoLabel ? '/logo.png' : '/top_logo2.png'} alt="sokka!" height={sunabacoLabel ? 36 : 56} width={sunabacoLabel ? 120 : 188} priority />
+          <Image src={showSunabacoTheme ? '/logo.png' : '/top_logo2.png'} alt="sokka!" height={showSunabacoTheme ? 36 : 56} width={showSunabacoTheme ? 120 : 188} priority />
           {sunabacoLabel && (
             <span className="text-[10px] text-[#57C0F3] font-medium -mt-1">{sunabacoLabel}</span>
           )}
@@ -33,9 +35,9 @@ export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
           className="absolute right-4 flex flex-col gap-1.5 p-2 rounded-md hover:bg-gray-50 transition-colors"
           aria-label="メニューを開く"
         >
-          <span className={`block w-5 h-0.5 ${sunabacoLabel ? 'bg-white' : 'bg-[#1A1A1A]'} transition-transform origin-center ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-5 h-0.5 ${sunabacoLabel ? 'bg-white' : 'bg-[#1A1A1A]'} transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-5 h-0.5 ${sunabacoLabel ? 'bg-white' : 'bg-[#1A1A1A]'} transition-transform origin-center ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`block w-5 h-0.5 ${showSunabacoTheme ? 'bg-white' : 'bg-[#1A1A1A]'} transition-transform origin-center ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`block w-5 h-0.5 ${showSunabacoTheme ? 'bg-white' : 'bg-[#1A1A1A]'} transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
+          <span className={`block w-5 h-0.5 ${showSunabacoTheme ? 'bg-white' : 'bg-[#1A1A1A]'} transition-transform origin-center ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
       </div>
 

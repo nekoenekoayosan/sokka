@@ -257,6 +257,7 @@ function SunabacoContent() {
       <Header
         onLogoClick={() => setPhase('setup')}
         sunabacoLabel={sunabacoLabel}
+        isSunabaco
       />
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 flex flex-col gap-6">
 
