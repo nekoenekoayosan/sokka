@@ -93,6 +93,30 @@ export default function SunabacoSetup({ onConfirm, initialConfig }: SunabacoSetu
       >
         この設定で学習を始める
       </button>
+
+      {/* SUNABACOリンク */}
+      <div className="grid grid-cols-2 gap-3 mt-2">
+        <a
+          href="https://sunabaco.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#1A1A1A] rounded-2xl p-5 flex flex-col gap-2 hover:opacity-90 transition-opacity"
+        >
+          <p className="text-xs text-[#57C0F3] font-medium">OFFICIAL</p>
+          <p className="text-sm text-white font-bold">SUNABACO公式サイト</p>
+          <p className="text-xs text-[#888888]">sunabaco.com</p>
+        </a>
+        <a
+          href="https://www.youtube.com/playlist?list=PL0ScNd_b1toyUdX6ogKHb9lYA1femfk22"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#1A1A1A] rounded-2xl p-5 flex flex-col gap-2 hover:opacity-90 transition-opacity"
+        >
+          <p className="text-xs text-[#F5D000] font-medium">YOUTUBE</p>
+          <p className="text-sm text-white font-bold">過去の卒業制作</p>
+          <p className="text-xs text-[#888888]">先輩たちの作品を見る</p>
+        </a>
+      </div>
     </div>
   );
 }
