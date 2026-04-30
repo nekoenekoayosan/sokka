@@ -1,10 +1,15 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 
 export interface Message {
   role: 'ai' | 'user';
   content: string;
+}
+
+interface ShareTerm {
+  word: string;
+  explanation: string;
 }
 
 interface ChatAreaProps {
@@ -17,6 +22,7 @@ interface ChatAreaProps {
   isSending: boolean;
   inputValue: string;
   onInputChange: (v: string) => void;
+  terms?: ShareTerm[];
 }
 
 export default function ChatArea({
@@ -29,6 +35,7 @@ export default function ChatArea({
   isSending,
   inputValue,
   onInputChange,
+  terms = [],
 }: ChatAreaProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -36,9 +43,16 @@ export default function ChatArea({
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const shareText = summary
-    ? `Sokka!で学習しました！\n\n${summary.slice(0, 100)}...\n#sokka学習 #SUNABACO`
-    : '';
+  const shareTerm = useMemo(() => {
+    if (terms.length === 0) return null;
+    return terms[Math.floor(Math.random() * terms.length)];
+  }, [terms]);
+
+  const shareText = shareTerm
+    ? `今日の学び\n\n【${shareTerm.word}】\n${shareTerm.explanation}\n\nSokka!で学習中！\n#sokka学習 #SUNABACO`
+    : summary
+      ? `Sokka!で学習しました！\n\n${summary.slice(0, 100)}...\n#sokka学習 #SUNABACO`
+      : '';
 
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
 

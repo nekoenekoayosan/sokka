@@ -336,6 +336,7 @@ function SunabacoContent() {
             isSending={isSending}
             inputValue={chatInput}
             onInputChange={setChatInput}
+            terms={terms}
           />
         )}
       </main>

@@ -350,6 +350,7 @@ function LearnContent() {
             isSending={isSending}
             inputValue={chatInput}
             onInputChange={setChatInput}
+            terms={terms}
           />
         )}
       </main>
