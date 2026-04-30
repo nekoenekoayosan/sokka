@@ -46,18 +46,33 @@ export default function Header({ onLogoClick, sunabacoLabel }: HeaderProps) {
       {menuOpen && (
         <div className="absolute right-4 top-14 bg-white rounded-xl shadow-md border border-gray-100 min-w-44 py-2 z-50">
           <Link
-            href="/vocabulary"
+            href="/learn"
             className="block px-5 py-3 text-sm text-[#1A1A1A] hover:bg-gray-50 transition-colors"
             onClick={() => setMenuOpen(false)}
           >
-            単語帳閲覧
+            学習を始める
           </Link>
+          <Link
+            href="/sunabaco"
+            className="block px-5 py-3 text-sm text-[#1A1A1A] hover:bg-gray-50 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            SUNABACO専用
+          </Link>
+          <div className="border-t border-gray-100 my-1" />
           <Link
             href="/history"
             className="block px-5 py-3 text-sm text-[#1A1A1A] hover:bg-gray-50 transition-colors"
             onClick={() => setMenuOpen(false)}
           >
             学習履歴
+          </Link>
+          <Link
+            href="/vocabulary"
+            className="block px-5 py-3 text-sm text-[#1A1A1A] hover:bg-gray-50 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            単語帳
           </Link>
         </div>
       )}
