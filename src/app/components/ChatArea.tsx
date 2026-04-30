@@ -60,14 +60,14 @@ export default function ChatArea({
       </div>
 
       {/* チャットメッセージ */}
-      <div className="flex flex-col gap-3 max-h-96 overflow-y-auto">
+      <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
         {messages.map((msg, i) => (
           <div
             key={i}
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+              className={`max-w-[90%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
                 msg.role === 'user'
                   ? 'bg-[#1B4FD8] text-white rounded-br-sm'
                   : 'bg-white border border-gray-100 text-[#1A1A1A] rounded-bl-sm shadow-sm'
