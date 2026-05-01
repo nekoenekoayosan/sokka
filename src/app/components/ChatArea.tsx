@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 export interface Message {
   role: 'ai' | 'user';
@@ -26,6 +27,7 @@ interface ChatAreaProps {
   userNote?: string;
   resultLevel?: string;
   sunabacoLabel?: string;
+  quizScore?: { correct: number; total: number };
 }
 
 export default function ChatArea({
@@ -42,6 +44,7 @@ export default function ChatArea({
   userNote,
   resultLevel,
   sunabacoLabel,
+  quizScore,
 }: ChatAreaProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -109,6 +112,12 @@ export default function ChatArea({
       {/* まとめ（最終ターン） */}
       {isLast && summary && (
         <div className="bg-[#F5D000]/10 border border-[#F5D000]/30 rounded-2xl p-5 flex flex-col gap-3">
+          {resultLevel && (
+            <Image src={`/${resultLevel}.png`} alt="クイズ結果" width={500} height={263} className="w-full rounded-xl" />
+          )}
+          {quizScore && (
+            <p className="text-sm text-center text-[#1A1A1A] font-bold">{quizScore.correct} / {quizScore.total} 問正解</p>
+          )}
           <p className="text-xs font-bold text-[#B89E00]">学習のまとめ</p>
           <p className="text-sm text-[#1A1A1A] leading-relaxed whitespace-pre-wrap">{summary}</p>
           {userNote && (

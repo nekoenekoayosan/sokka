@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import InputArea from '../components/InputArea';
 import LoadingScreen from '../components/LoadingScreen';
-import QuizArea, { Term } from '../components/QuizArea';
+import QuizArea, { Term, QuizScore } from '../components/QuizArea';
 import FlashCardReview from '../components/FlashCardReview';
 import ChatArea, { Message } from '../components/ChatArea';
 
@@ -87,6 +87,7 @@ function LearnContent() {
   const [summaryText, setSummaryText] = useState('');
   const [showSummary, setShowSummary] = useState(false);
   const [loadingReady, setLoadingReady] = useState(false);
+  const [quizScore, setQuizScore] = useState<QuizScore | null>(null);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatTurn, setChatTurn] = useState(0);
@@ -204,8 +205,10 @@ function LearnContent() {
     // TODO: vocabularyテーブルへの保存
   };
 
-  const handleQuizComplete = async () => {
+  const handleQuizComplete = async (score?: QuizScore) => {
+    if (score) setQuizScore(score);
     if (isDemo) {
+      if (!score) setQuizScore({ correct: 6, total: 6 });
       setPhase('loading');
       setLoadingStatus('会話を準備中...');
       await new Promise((r) => setTimeout(r, 1000));
@@ -361,7 +364,8 @@ function LearnContent() {
             onInputChange={setChatInput}
             terms={terms}
             userNote={userNote}
-            resultLevel="good"
+            resultLevel={quizScore ? (quizScore.correct === quizScore.total ? '3' : quizScore.correct >= quizScore.total / 2 ? '2' : '1') : '2'}
+            quizScore={quizScore ?? undefined}
           />
         )}
       </main>

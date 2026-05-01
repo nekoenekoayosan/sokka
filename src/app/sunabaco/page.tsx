@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import InputArea from '../components/InputArea';
 import LoadingScreen from '../components/LoadingScreen';
-import QuizArea, { Term } from '../components/QuizArea';
+import QuizArea, { Term, QuizScore } from '../components/QuizArea';
 import FlashCardReview from '../components/FlashCardReview';
 import ChatArea, { Message } from '../components/ChatArea';
 import SunabacoSetup, { SunabacoConfig } from '../components/SunabacoSetup';
@@ -73,6 +73,7 @@ function SunabacoContent() {
   const [isSending, setIsSending] = useState(false);
   const [userNote, setUserNote] = useState('');
   const [loadingReady, setLoadingReady] = useState(false);
+  const [quizScore, setQuizScore] = useState<QuizScore | null>(null);
 
   const handleSubmit = async (inputType: InputType, content: string | File, wantSummary: boolean) => {
     setShowSummary(wantSummary);
@@ -169,8 +170,10 @@ function SunabacoContent() {
 
   const handleSave = (_term: string, _meaning: string) => {};
 
-  const handleQuizComplete = async () => {
+  const handleQuizComplete = async (score?: QuizScore) => {
+    if (score) setQuizScore(score);
     if (isDemo) {
+      if (!score) setQuizScore({ correct: 3, total: 3 });
       setPhase('loading');
       setLoadingStatus('会話を準備中...');
       await new Promise((r) => setTimeout(r, 1000));
@@ -347,7 +350,8 @@ function SunabacoContent() {
             onInputChange={setChatInput}
             terms={terms}
             userNote={userNote}
-            resultLevel="good"
+            resultLevel={quizScore ? (quizScore.correct === quizScore.total ? '3' : quizScore.correct >= quizScore.total / 2 ? '2' : '1') : '2'}
+            quizScore={quizScore ?? undefined}
             sunabacoLabel={sunabacoLabel}
           />
         )}

@@ -21,12 +21,17 @@ interface CheckResult {
   related_links: RelatedLink[];
 }
 
+export interface QuizScore {
+  correct: number;
+  total: number;
+}
+
 interface QuizAreaProps {
   terms: Term[];
-  onComplete: () => void;
+  onComplete: (score: QuizScore) => void;
   onCheck: (term: string, correctMeaning: string, userAnswer: string) => Promise<CheckResult>;
   onSave: (term: string, meaning: string) => void;
-  onSkipToChat?: () => void;
+  onSkipToChat?: (score: QuizScore) => void;
   title?: string;
 }
 
@@ -35,6 +40,7 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState<CheckResult | null>(null);
   const [isChecking, setIsChecking] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
 
   const current = terms[currentIdx];
   const isLast = currentIdx === terms.length - 1;
@@ -44,13 +50,17 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
     setIsChecking(true);
     const res = await onCheck(current.word, current.explanation, answer);
     setResult(res);
-    if (res.is_correct) onSave(current.word, current.explanation);
+    if (res.is_correct) {
+      setCorrectCount((c) => c + 1);
+      onSave(current.word, current.explanation);
+    }
     setIsChecking(false);
   };
 
   const handleNext = () => {
     if (isLast) {
-      onComplete();
+      const finalCorrect = result?.is_correct ? correctCount : correctCount;
+      onComplete({ correct: finalCorrect, total: terms.length });
     } else {
       setCurrentIdx((i) => i + 1);
       setAnswer('');
@@ -65,7 +75,7 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
 
   const handleSkip = () => {
     if (isLast) {
-      onComplete();
+      onComplete({ correct: correctCount, total: terms.length });
     } else {
       setCurrentIdx((i) => i + 1);
       setAnswer('');
@@ -79,7 +89,7 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-bold text-[#1A1A1A]">{title}</h2>
         <button
-          onClick={onSkipToChat}
+          onClick={() => onSkipToChat?.({ correct: correctCount, total: currentIdx + 1 })}
           className="text-xs text-[#227298] hover:opacity-70 transition-opacity"
         >
           ？ わからないときはAIに聞いてみよう →
@@ -95,7 +105,7 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
       </div>
       <div className="flex items-center justify-between">
         <button
-          onClick={onComplete}
+          onClick={() => onComplete({ correct: correctCount, total: currentIdx + 1 })}
           className="text-xs text-[#888888] hover:text-[#1A1A1A] transition-colors"
         >
           途中保存して会話へ →
