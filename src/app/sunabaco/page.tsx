@@ -350,7 +350,7 @@ function SunabacoContent() {
             onInputChange={setChatInput}
             terms={terms}
             userNote={userNote}
-            resultLevel={quizScore ? (quizScore.correct === quizScore.total ? '1' : quizScore.correct >= quizScore.total / 2 ? '2' : '3') : '2'}
+            resultLevel={quizScore ? (quizScore.correct === quizScore.total ? '3' : quizScore.correct >= quizScore.total / 2 ? '2' : '1') : '2'}
             quizScore={quizScore ?? undefined}
             sunabacoLabel={sunabacoLabel}
           />

@@ -16,6 +16,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     '2': 'クイズ結果：まだいけます | sokka!',
     '3': 'クイズ結果：完敗しました | sokka!',
   };
+  // 1.png=ググってください(半分以下), 2.png=まだいけます(半分以上), 3.png=完敗しました(全問正解)
 
   return {
     title: titleMap[result] || 'クイズ結果 | sokka!',
