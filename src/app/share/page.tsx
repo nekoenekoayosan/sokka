@@ -12,9 +12,9 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const ogImage = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://sokka.vercel.app'}/${result}.png`;
 
   const titleMap: Record<string, string> = {
-    '1': 'クイズ結果：完敗しました | sokka!',
+    '1': 'クイズ結果：ググってください | sokka!',
     '2': 'クイズ結果：まだいけます | sokka!',
-    '3': 'クイズ結果：ググってください | sokka!',
+    '3': 'クイズ結果：完敗しました | sokka!',
   };
 
   return {
