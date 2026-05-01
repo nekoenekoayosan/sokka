@@ -52,12 +52,11 @@ export default function ChatArea({
   const handleShare = () => {
     const labelText = sunabacoLabel ? `【${sunabacoLabel}】\n` : '';
 
-    // クイズ用語から最大3つピックアップして学びとしてシェア
+    // クイズ用語から1つランダムにピックアップ
     let learningText = '';
     if (terms.length > 0) {
-      const shuffled = [...terms].sort(() => Math.random() - 0.5);
-      const picked = shuffled.slice(0, 3);
-      learningText = picked.map((t) => `・${t.word}：${t.explanation}`).join('\n');
+      const picked = terms[Math.floor(Math.random() * terms.length)];
+      learningText = `【${picked.word}】\n${picked.explanation}`;
     }
 
     const tweetText = learningText
