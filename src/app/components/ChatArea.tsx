@@ -23,6 +23,7 @@ interface ChatAreaProps {
   inputValue: string;
   onInputChange: (v: string) => void;
   terms?: ShareTerm[];
+  userNote?: string;
 }
 
 export default function ChatArea({
@@ -36,6 +37,7 @@ export default function ChatArea({
   inputValue,
   onInputChange,
   terms = [],
+  userNote,
 }: ChatAreaProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -99,6 +101,12 @@ export default function ChatArea({
         <div className="bg-[#F5D000]/10 border border-[#F5D000]/30 rounded-2xl p-5 flex flex-col gap-3">
           <p className="text-xs font-bold text-[#B89E00]">学習のまとめ</p>
           <p className="text-sm text-[#1A1A1A] leading-relaxed whitespace-pre-wrap">{summary}</p>
+          {userNote && (
+            <div className="bg-white/60 rounded-xl px-4 py-3 mt-1">
+              <p className="text-xs font-bold text-[#888888] mb-1">あなたのメモ</p>
+              <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">{userNote}</p>
+            </div>
+          )}
           <a
             href={twitterUrl}
             target="_blank"

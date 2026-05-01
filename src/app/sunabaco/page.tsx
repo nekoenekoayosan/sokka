@@ -185,7 +185,7 @@ function SunabacoContent() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ summary_id: summaryId, messages: [], turn: 0, is_sunabaco: true }),
+        body: JSON.stringify({ summary_id: summaryId, messages: [], turn: 0, is_sunabaco: true, user_note: userNote || undefined }),
       });
 
       if (!res.ok) throw new Error('チャット開始に失敗しました');
@@ -339,6 +339,7 @@ function SunabacoContent() {
             inputValue={chatInput}
             onInputChange={setChatInput}
             terms={terms}
+            userNote={userNote}
           />
         )}
       </main>

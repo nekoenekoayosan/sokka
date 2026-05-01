@@ -223,6 +223,7 @@ function LearnContent() {
           summary_id: summaryId,
           messages: [],
           turn: 0,
+          user_note: userNote || undefined,
         }),
       });
 
@@ -351,6 +352,7 @@ function LearnContent() {
             inputValue={chatInput}
             onInputChange={setChatInput}
             terms={terms}
+            userNote={userNote}
           />
         )}
       </main>

@@ -6,7 +6,7 @@ const MAX_TURNS = 5;
 
 export async function POST(request: NextRequest) {
   try {
-    const { summary_id, messages, turn, is_sunabaco } = await request.json();
+    const { summary_id, messages, turn, is_sunabaco, user_note } = await request.json();
 
     if (!summary_id || turn === undefined) {
       return NextResponse.json(
@@ -31,11 +31,13 @@ export async function POST(request: NextRequest) {
 
     const isLastTurn = turn >= MAX_TURNS;
 
+    const userNoteSection = user_note ? `\n\n【ユーザー自身のメモ】\n${user_note}\n※このメモは学習者がローディング中に自分で書いたものです。会話の中で自然に参照・深掘りしてください。` : '';
+
     const baseContext = `【学習内容の要約】
 ${summaryData.summary}
 
 【重要用語】
-${JSON.stringify(summaryData.terms, null, 2)}`;
+${JSON.stringify(summaryData.terms, null, 2)}${userNoteSection}`;
 
     const normalRules = `ルール：
 - 生徒の理解度に合わせて質問してください
