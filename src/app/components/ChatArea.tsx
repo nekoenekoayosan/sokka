@@ -76,7 +76,7 @@ export default function ChatArea({
       </div>
 
       {/* チャットメッセージ */}
-      <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
+      <div className="flex flex-col gap-3">
         {messages.map((msg, i) => (
           <div
             key={i}
