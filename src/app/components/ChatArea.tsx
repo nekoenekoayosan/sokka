@@ -50,14 +50,20 @@ export default function ChatArea({
   }, [messages]);
 
   const handleShare = () => {
-    // 文の区切り（。！？）で切って途中で途切れないようにする
-    let shortSummary = summary;
-    if (summary.length > 100) {
-      const cutPoint = summary.slice(0, 100).search(/[。！？!?][^。！？!?]*$/);
-      shortSummary = cutPoint > 0 ? summary.slice(0, cutPoint + 1) : summary.slice(0, 100);
-    }
     const labelText = sunabacoLabel ? `【${sunabacoLabel}】\n` : '';
-    const tweetText = `${labelText}Sokka!で学習しました！\n\n${shortSummary}\n\n#sokka学習 #SUNABACO`;
+
+    // クイズ用語から最大3つピックアップして学びとしてシェア
+    let learningText = '';
+    if (terms.length > 0) {
+      const shuffled = [...terms].sort(() => Math.random() - 0.5);
+      const picked = shuffled.slice(0, 3);
+      learningText = picked.map((t) => `・${t.word}：${t.explanation}`).join('\n');
+    }
+
+    const tweetText = learningText
+      ? `${labelText}今日の学び\n\n${learningText}\n\n#sokka学習 #SUNABACO`
+      : `${labelText}Sokka!で学習しました！\n\n#sokka学習 #SUNABACO`;
+
     const appUrl = `${window.location.origin}`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(appUrl)}`;
     window.open(tweetUrl, '_blank');
