@@ -62,9 +62,11 @@ export default function ChatArea({
       learningText = `【${picked.word}】\n${picked.explanation}`;
     }
 
+    const hashtags = sunabacoLabel ? '#sokka学習 #SUNABACO' : '#sokka学習';
+
     const tweetText = learningText
-      ? `${labelText}今日の学び\n\n${learningText}\n\n#sokka学習 #SUNABACO`
-      : `${labelText}Sokka!で学習しました！\n\n#sokka学習 #SUNABACO`;
+      ? `${labelText}今日の学び\n\n${learningText}\n\n${hashtags}`
+      : `${labelText}Sokka!で学習しました！\n\n${hashtags}`;
 
     const shareUrl = `${window.location.origin}/share?result=${resultLevel ?? '2'}`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
