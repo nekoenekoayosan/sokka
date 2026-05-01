@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from './AuthProvider';
 
 interface HeaderProps {
   onLogoClick?: () => void;
@@ -13,6 +14,7 @@ interface HeaderProps {
 export default function Header({ onLogoClick, sunabacoLabel, isSunabaco = false }: HeaderProps) {
   const showSunabacoTheme = isSunabaco || !!sunabacoLabel;
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   return (
     <header className={`border-b shadow-sm sticky top-0 z-50 ${showSunabacoTheme ? 'bg-[#1A1A1A]' : 'bg-[#FFFFFF] border-gray-100'}`}>
@@ -80,6 +82,26 @@ export default function Header({ onLogoClick, sunabacoLabel, isSunabaco = false 
           >
             単語帳
           </Link>
+          <div className="border-t border-gray-100 my-1" />
+          {user ? (
+            <>
+              <p className="px-5 py-2 text-xs text-[#888888] truncate">{user.email}</p>
+              <button
+                onClick={() => { signOut(); setMenuOpen(false); }}
+                className="block w-full text-left px-5 py-3 text-sm text-[#A72929] hover:bg-gray-50 transition-colors"
+              >
+                ログアウト
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="block px-5 py-3 text-sm text-[#227298] hover:bg-gray-50 transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              ログイン
+            </Link>
+          )}
         </div>
       )}
     </header>

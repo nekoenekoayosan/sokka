@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from './components/Header';
+import { useAuth } from './components/AuthProvider';
 
 export default function MainPage() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-[#F5F0E8] flex flex-col">
       <Header />
@@ -15,10 +17,21 @@ export default function MainPage() {
         <div className="flex flex-col items-center gap-2">
           <Image src="/top_logo2.png" alt="sokka!" height={80} width={268} priority />
           <p className="text-sm text-[#888888]">学んだことを、自分のものにする</p>
+          {user && (
+            <p className="text-xs text-[#227298]">{user.email} でログイン中</p>
+          )}
         </div>
 
         {/* メインアクション */}
         <div className="w-full flex flex-col gap-3 mt-4">
+          {!user && (
+            <Link
+              href="/login"
+              className="w-full bg-[#1A1A1A] text-white text-center text-sm font-medium py-4 rounded-full hover:bg-[#333] transition-colors shadow-sm"
+            >
+              ログイン / アカウント作成
+            </Link>
+          )}
           <Link
             href="/learn"
             className="w-full bg-[#57C0F3] text-white text-center text-sm font-medium py-4 rounded-full hover:bg-[#3aaee0] transition-colors shadow-sm"
