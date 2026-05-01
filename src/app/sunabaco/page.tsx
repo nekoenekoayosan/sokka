@@ -347,6 +347,8 @@ function SunabacoContent() {
             onInputChange={setChatInput}
             terms={terms}
             userNote={userNote}
+            resultLevel="good"
+            sunabacoLabel={sunabacoLabel}
           />
         )}
       </main>

@@ -361,6 +361,7 @@ function LearnContent() {
             onInputChange={setChatInput}
             terms={terms}
             userNote={userNote}
+            resultLevel="good"
           />
         )}
       </main>
