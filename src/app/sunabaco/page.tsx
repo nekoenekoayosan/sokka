@@ -32,9 +32,11 @@ const DEMO_TERMS: Term[] = [
 ];
 
 const DEMO_CHAT = [
-  'お疲れさまでした！今日の学習内容について、自分の言葉で説明してみてください。',
-  'いい理解ですね！では、それがどのように実務で活用されるか考えてみましょう。',
-  '素晴らしい！今日の学習お疲れさまでした！',
+  'お疲れさまでした！今日学んだSokka!の仕組みについて、一番「なるほど！」と思った部分を教えてください。',
+  '面白い視点ですね！実は「ラーニングピラミッド」という研究では、人に教えることで記憶定着率が90%まで上がると言われています。Sokka!のチャット機能はまさにその原理を使っています。では、AIがなぜ「答えを教える」のではなく「問いかける」設計になっていると思いますか？',
+  'そうです！これはソクラテス式問答という2500年前の哲学的手法と同じアプローチです。Googleの社内研修でも活用されているんですよ。では、Gemini APIのような生成AIがこの役割を担えるようになったのは、なぜだと思いますか？',
+  '良い洞察です！大規模言語モデルは膨大なテキストから「文脈に合った応答」を学習しています。ちなみにGeminiはテキスト・音声・画像を扱えるマルチモーダルAIで、Sokka!の音声入力対応もそのおかげです。今後、どんな場面でSokka!を使ってみたいですか？',
+  '素敵なアイデアです！「インプット→アウトプット→深掘り」のサイクルは、AI時代でも変わらない最強の学習法です。今日出てきたキーワード（ラーニングピラミッド・マルチモーダルAIなど）をぜひ自分でも調べてみてください。学習お疲れさまでした！',
 ];
 
 const DEMO_SUMMARY = 'Sokka!の設計原理はラーニングピラミッドとソクラテス式問答にあります。AIが答えを教えるのではなく問いかけることで、能動的なアウトプットを促し記憶定着率を高めます。今日の学びをきっかけに、生成AIと学習の関係をさらに探求してみてください。';
@@ -208,7 +210,7 @@ function SunabacoContent() {
       setMessages((prev) => [...prev, { role: 'user', content: text }]);
       await new Promise((r) => setTimeout(r, 800));
       const reply = DEMO_CHAT[chatTurn] ?? DEMO_CHAT[DEMO_CHAT.length - 1];
-      const isLast = chatTurn >= 2;
+      const isLast = chatTurn >= 4;
       setMessages((prev) => [...prev, { role: 'ai', content: reply }]);
       setChatTurn((prev) => prev + 1);
       if (isLast) { setIsLastTurn(true); setChatSummary(DEMO_SUMMARY); }
