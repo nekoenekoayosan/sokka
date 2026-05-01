@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 
 export interface Message {
   role: 'ai' | 'user';
@@ -24,6 +24,8 @@ interface ChatAreaProps {
   onInputChange: (v: string) => void;
   terms?: ShareTerm[];
   userNote?: string;
+  resultLevel?: string;
+  sunabacoLabel?: string;
 }
 
 export default function ChatArea({
@@ -38,6 +40,8 @@ export default function ChatArea({
   onInputChange,
   terms = [],
   userNote,
+  resultLevel,
+  sunabacoLabel,
 }: ChatAreaProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -45,18 +49,11 @@ export default function ChatArea({
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const shareTerm = useMemo(() => {
-    if (terms.length === 0) return null;
-    return terms[Math.floor(Math.random() * terms.length)];
-  }, [terms]);
-
-  const shareText = shareTerm
-    ? `今日の学び\n\n【${shareTerm.word}】\n${shareTerm.explanation}\n\nSokka!で学習中！\n#sokka学習 #SUNABACO`
-    : summary
-      ? `Sokka!で学習しました！\n\n${summary.slice(0, 100)}...\n#sokka学習 #SUNABACO`
-      : '';
-
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+  const handleShare = () => {
+    const shareUrl = `${window.location.origin}/share?result=${resultLevel ?? ''}&summary=${encodeURIComponent(summary)}&label=${encodeURIComponent(sunabacoLabel ?? '')}`;
+    const tweetUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`;
+    window.open(tweetUrl, '_blank');
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -107,15 +104,13 @@ export default function ChatArea({
               <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">{userNote}</p>
             </div>
           )}
-          <a
-            href={twitterUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={handleShare}
             className="inline-flex items-center justify-center gap-2 bg-[#1A1A1A] text-white text-sm font-medium py-2.5 rounded-xl hover:opacity-80 transition-opacity"
           >
             <span>𝕏</span>
             <span>Xにシェア</span>
-          </a>
+          </button>
         </div>
       )}
 
