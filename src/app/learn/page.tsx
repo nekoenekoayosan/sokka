@@ -86,6 +86,7 @@ function LearnContent() {
   const [summaryId, setSummaryId] = useState<string | null>(null);
   const [summaryText, setSummaryText] = useState('');
   const [showSummary, setShowSummary] = useState(false);
+  const [loadingReady, setLoadingReady] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatTurn, setChatTurn] = useState(0);
@@ -98,6 +99,8 @@ function LearnContent() {
   const handleSubmit = async (inputType: InputType, content: string | File, wantSummary: boolean) => {
     setShowSummary(wantSummary);
 
+    setLoadingReady(false);
+
     if (isDemo) {
       setPhase('loading');
       setLoadingStatus('文字起こし中...');
@@ -108,7 +111,7 @@ function LearnContent() {
       await new Promise((r) => setTimeout(r, 1500));
       setTerms(DEMO_TERMS);
       setSummaryText('これはデモ用の要約テキストです。Sokka!は学習内容を自動で分析し、クイズとチャットで能動的な定着を促すアプリケーションです。');
-      setPhase('review');
+      setLoadingReady(true);
       return;
     }
 
@@ -152,7 +155,7 @@ function LearnContent() {
       setSummaryId(data.summary_id);
       setTerms(data.terms);
       setSummaryText(data.summary || '');
-      setPhase('review');
+      setLoadingReady(true);
     } catch (error) {
       console.error('Process error:', error);
       alert(error instanceof Error ? error.message : '処理中にエラーが発生しました');
@@ -316,7 +319,12 @@ function LearnContent() {
         )}
 
         {phase === 'loading' && (
-          <LoadingScreen status={loadingStatus} onNoteChange={setUserNote} />
+          <LoadingScreen
+            status={loadingStatus}
+            onNoteChange={setUserNote}
+            isReady={loadingReady}
+            onProceed={() => setPhase('review')}
+          />
         )}
 
         {phase === 'review' && terms.length > 0 && (

@@ -72,9 +72,11 @@ function SunabacoContent() {
   const [chatInput, setChatInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [userNote, setUserNote] = useState('');
+  const [loadingReady, setLoadingReady] = useState(false);
 
   const handleSubmit = async (inputType: InputType, content: string | File, wantSummary: boolean) => {
     setShowSummary(wantSummary);
+    setLoadingReady(false);
 
     if (isDemo) {
       setPhase('loading');
@@ -86,7 +88,7 @@ function SunabacoContent() {
       await new Promise((r) => setTimeout(r, 1500));
       setTerms(DEMO_TERMS);
       setSummaryText('これはデモ用の要約テキストです。');
-      setPhase('review');
+      setLoadingReady(true);
       return;
     }
 
@@ -128,7 +130,7 @@ function SunabacoContent() {
       setSummaryId(data.summary_id);
       setTerms(data.terms);
       setSummaryText(data.summary || '');
-      setPhase('review');
+      setLoadingReady(true);
     } catch (error) {
       console.error('Process error:', error);
       alert(error instanceof Error ? error.message : '処理中にエラーが発生しました');
@@ -298,7 +300,12 @@ function SunabacoContent() {
         )}
 
         {phase === 'loading' && (
-          <LoadingScreen status={loadingStatus} onNoteChange={setUserNote} />
+          <LoadingScreen
+            status={loadingStatus}
+            onNoteChange={setUserNote}
+            isReady={loadingReady}
+            onProceed={() => setPhase('review')}
+          />
         )}
 
         {phase === 'review' && terms.length > 0 && (

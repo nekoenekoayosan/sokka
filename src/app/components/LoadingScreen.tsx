@@ -11,6 +11,8 @@ interface LoadingScreenProps {
   status: string;
   reviewQuizzes?: ReviewQuiz[];
   onNoteChange?: (note: string) => void;
+  isReady?: boolean;
+  onProceed?: () => void;
 }
 
 const MOCK_REVIEWS: ReviewQuiz[] = [
@@ -21,7 +23,7 @@ const MOCK_REVIEWS: ReviewQuiz[] = [
 
 const ESTIMATED_SECONDS = 30;
 
-export default function LoadingScreen({ status, reviewQuizzes, onNoteChange }: LoadingScreenProps) {
+export default function LoadingScreen({ status, reviewQuizzes, onNoteChange, isReady, onProceed }: LoadingScreenProps) {
   const quizzes = reviewQuizzes ?? MOCK_REVIEWS;
   const [currentIdx, setCurrentIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -48,17 +50,35 @@ export default function LoadingScreen({ status, reviewQuizzes, onNoteChange }: L
     <div className="flex flex-col items-center gap-8 py-12">
       {/* スピナー + ステータス + 残り時間 */}
       <div className="flex flex-col items-center gap-3 w-full">
-        <div className="w-10 h-10 rounded-full border-4 border-gray-200 border-t-[#1B4FD8] animate-spin" />
-        <p className="text-sm text-[#888888]">{status}</p>
-        <div className="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-[#57C0F3] rounded-full transition-all duration-1000"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <p className="text-xs text-[#888888]">
-          {remaining > 0 ? `残り約 ${remaining} 秒` : 'まもなく完了します...'}
-        </p>
+        {isReady ? (
+          <>
+            <div className="w-10 h-10 rounded-full bg-[#57C0F3] flex items-center justify-center">
+              <span className="text-white text-lg">&#10003;</span>
+            </div>
+            <p className="text-sm font-bold text-[#1A1A1A]">準備完了！</p>
+            <p className="text-xs text-[#888888]">メモを書き終えたら次へ進みましょう</p>
+            <button
+              onClick={onProceed}
+              className="mt-2 px-10 bg-[#57C0F3] text-white text-sm font-medium py-3 rounded-full hover:bg-[#3aaee0] transition-colors shadow-sm"
+            >
+              次へ進む
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="w-10 h-10 rounded-full border-4 border-gray-200 border-t-[#1B4FD8] animate-spin" />
+            <p className="text-sm text-[#888888]">{status}</p>
+            <div className="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#57C0F3] rounded-full transition-all duration-1000"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-xs text-[#888888]">
+              {remaining > 0 ? `残り約 ${remaining} 秒` : 'まもなく完了します...'}
+            </p>
+          </>
+        )}
       </div>
 
       {/* 自分で学んだことメモ */}
