@@ -50,8 +50,11 @@ export default function ChatArea({
   }, [messages]);
 
   const handleShare = () => {
-    const shareUrl = `${window.location.origin}/share?result=${resultLevel ?? ''}&summary=${encodeURIComponent(summary)}&label=${encodeURIComponent(sunabacoLabel ?? '')}`;
-    const tweetUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`;
+    const shortSummary = summary.slice(0, 80);
+    const labelText = sunabacoLabel ? `【${sunabacoLabel}】` : '';
+    const tweetText = `${labelText}Sokka!で学習しました！\n\n${shortSummary}...\n\n#sokka学習 #SUNABACO`;
+    const appUrl = `${window.location.origin}`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(appUrl)}`;
     window.open(tweetUrl, '_blank');
   };
 
