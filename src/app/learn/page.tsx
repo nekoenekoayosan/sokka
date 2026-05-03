@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import { fetchWithAuth } from '@/lib/fetch-with-auth';
 import { useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import InputArea from '../components/InputArea';
@@ -136,7 +137,7 @@ function LearnContent() {
         formData.append('content', content);
       }
 
-      const res = await fetch('/api/process', {
+      const res = await fetchWithAuth('/api/process', {
         method: 'POST',
         body: formData,
       });
@@ -180,7 +181,7 @@ function LearnContent() {
       };
     }
 
-    const res = await fetch('/api/quiz/check', {
+    const res = await fetchWithAuth('/api/quiz/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -222,7 +223,7 @@ function LearnContent() {
     setLoadingStatus('会話を準備中...');
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetchWithAuth('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -280,7 +281,7 @@ function LearnContent() {
 
     try {
       const nextTurn = chatTurn + 1;
-      const res = await fetch('/api/chat', {
+      const res = await fetchWithAuth('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

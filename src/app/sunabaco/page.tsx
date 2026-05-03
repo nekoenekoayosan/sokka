@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import { fetchWithAuth } from '@/lib/fetch-with-auth';
 import { useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import InputArea from '../components/InputArea';
@@ -113,7 +114,7 @@ function SunabacoContent() {
         formData.append('content', content);
       }
 
-      const res = await fetch('/api/process', {
+      const res = await fetchWithAuth('/api/process', {
         method: 'POST',
         body: formData,
       });
@@ -155,7 +156,7 @@ function SunabacoContent() {
       };
     }
 
-    const res = await fetch('/api/quiz/check', {
+    const res = await fetchWithAuth('/api/quiz/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ term, correct_meaning: correctMeaning, user_answer: userAnswer }),
@@ -187,7 +188,7 @@ function SunabacoContent() {
     setLoadingStatus('会話を準備中...');
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetchWithAuth('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ summary_id: summaryId, messages: [], turn: 0, is_sunabaco: true, user_note: userNote || undefined }),
@@ -233,7 +234,7 @@ function SunabacoContent() {
 
     try {
       const nextTurn = chatTurn + 1;
-      const res = await fetch('/api/chat', {
+      const res = await fetchWithAuth('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ summary_id: summaryId, messages: updatedMessages, turn: nextTurn, is_sunabaco: true }),

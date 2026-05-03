@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { flashModel, generateWithRetry } from "@/lib/gemini";
 import { supabase } from "@/lib/supabase";
+import { getUserId } from "@/lib/auth-helper";
 import { YoutubeTranscript } from "youtube-transcript";
 
 async function transcribeAudio(file: File): Promise<string> {
@@ -88,6 +89,7 @@ triviaには、学習者が興味を持つような意外な事実や歴史的�
 
 export async function POST(request: NextRequest) {
   try {
+    const userId = await getUserId(request);
     const contentType = request.headers.get("content-type") || "";
     let inputType: string;
     let transcribedText: string;
@@ -159,6 +161,7 @@ export async function POST(request: NextRequest) {
         file_name: fileName,
         file_type: inputType,
         transcribed_text: transcribedText,
+        ...(userId && { user_id: userId }),
       })
       .select("id")
       .single();
@@ -175,6 +178,7 @@ export async function POST(request: NextRequest) {
         file_id: fileRecord.id,
         summary,
         terms,
+        ...(userId && { user_id: userId }),
       })
       .select("id")
       .single();
