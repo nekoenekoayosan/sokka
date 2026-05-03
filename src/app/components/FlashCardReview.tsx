@@ -62,9 +62,9 @@ export default function FlashCardReview({ terms, onStartQuiz, title }: FlashCard
       {/* フラッシュカード */}
       <div
         onClick={handleFlip}
-        className="cursor-pointer select-none"
+        className="cursor-pointer select-none perspective-[800px]"
       >
-        <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center min-h-[200px] transition-all ${flipped ? 'bg-[#F3FBFF]' : ''}`}>
+        <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center min-h-[200px] transition-all duration-300 ${flipped ? 'bg-[#F3FBFF] animate-flip-in' : ''} hover:shadow-md`}>
           {!flipped ? (
             <>
               <span className={`text-2xl font-bold mb-2 ${current.difficulty === 'hard' ? 'text-[#A72929]' : 'text-[#1A1A1A]'}`}>

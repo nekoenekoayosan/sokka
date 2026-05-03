@@ -165,9 +165,9 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
 
         {/* 正解フィードバック */}
         {result?.is_correct && (
-          <div className="flex flex-col gap-3">
-            <div className="bg-[#F5D000]/10 border border-[#F5D000]/30 rounded-xl px-4 py-3">
-              <p className="text-xs font-bold text-[#B89E00] mb-1">正解！</p>
+          <div className="flex flex-col gap-3 animate-glow">
+            <div className="bg-[#F5D000]/10 border border-[#F5D000]/30 rounded-xl px-4 py-3 animate-fade-in-up">
+              <p className="text-xs font-bold text-[#B89E00] mb-1">🎉 正解！</p>
               <p className="text-sm text-[#1A1A1A]">{result.feedback}</p>
             </div>
             <p className="text-xs text-[#888888]">✓ 単語帳に保存しました</p>
@@ -189,8 +189,8 @@ export default function QuizArea({ terms, onComplete, onCheck, onSave, onSkipToC
 
         {/* 不正解フィードバック */}
         {result && !result.is_correct && (
-          <div className="flex flex-col gap-3">
-            <div className="bg-[#A72929]/10 border border-[#A72929]/20 rounded-xl px-4 py-3">
+          <div className="flex flex-col gap-3 animate-shake">
+            <div className="bg-[#A72929]/10 border border-[#A72929]/20 rounded-xl px-4 py-3 animate-fade-in">
               <p className="text-xs font-bold text-[#A72929] mb-1">もう一度考えてみよう</p>
               <p className="text-sm text-[#1A1A1A]">{result.feedback}</p>
             </div>

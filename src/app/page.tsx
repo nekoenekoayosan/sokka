@@ -14,7 +14,7 @@ export default function MainPage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-12 flex flex-col items-center gap-8">
 
         {/* ロゴ */}
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 animate-fade-in-up">
           <Image src="/top_logo2.png" alt="sokka!" height={80} width={268} priority />
           <p className="text-sm text-[#888888]">学んだことを、自分のものにする</p>
           {user && (
@@ -23,35 +23,35 @@ export default function MainPage() {
         </div>
 
         {/* メインアクション */}
-        <div className="w-full flex flex-col gap-3 mt-4">
+        <div className="w-full flex flex-col gap-3 mt-4 animate-fade-in-up stagger-2">
           {!user && (
             <Link
               href="/login"
-              className="w-full bg-[#1A1A1A] text-white text-center text-sm font-medium py-4 rounded-full hover:bg-[#333] transition-colors shadow-sm"
+              className="w-full bg-[#1A1A1A] text-white text-center text-sm font-medium py-4 rounded-full hover:bg-[#333] hover:scale-[1.02] transition-all shadow-sm"
             >
               ログイン / アカウント作成
             </Link>
           )}
           <Link
             href="/learn"
-            className="w-full bg-[#57C0F3] text-white text-center text-sm font-medium py-4 rounded-full hover:bg-[#3aaee0] transition-colors shadow-sm"
+            className="w-full bg-[#57C0F3] text-white text-center text-sm font-medium py-4 rounded-full hover:bg-[#3aaee0] hover:scale-[1.02] transition-all shadow-sm"
           >
             学習を始める
           </Link>
 
           <Link
             href="/learn?demo=true"
-            className="w-full border border-[#57C0F3] text-[#227298] text-center text-sm font-medium py-4 rounded-full hover:bg-[#57C0F3]/5 transition-colors"
+            className="w-full border border-[#57C0F3] text-[#227298] text-center text-sm font-medium py-4 rounded-full hover:bg-[#57C0F3]/5 hover:scale-[1.02] transition-all"
           >
             デモを試す
           </Link>
         </div>
 
         {/* 機能カード */}
-        <div className="w-full grid grid-cols-2 gap-3 mt-4">
+        <div className="w-full grid grid-cols-2 gap-3 mt-4 animate-fade-in-up stagger-3">
           <Link
             href="/sunabaco"
-            className="bg-[#1A1A1A] rounded-2xl p-5 flex flex-col gap-2 hover:opacity-90 transition-opacity"
+            className="bg-[#1A1A1A] rounded-2xl p-5 flex flex-col gap-2 hover:-translate-y-1 hover:shadow-lg transition-all"
           >
             <p className="text-xs text-[#57C0F3] font-medium">SUNABACO</p>
             <p className="text-sm text-white font-bold">専用モード</p>
@@ -60,7 +60,7 @@ export default function MainPage() {
 
           <Link
             href="/history"
-            className="bg-white rounded-2xl p-5 flex flex-col gap-2 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+            className="bg-white rounded-2xl p-5 flex flex-col gap-2 border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"
           >
             <p className="text-xs text-[#F5D000] font-medium">HISTORY</p>
             <p className="text-sm text-[#1A1A1A] font-bold">学習履歴</p>
@@ -69,7 +69,7 @@ export default function MainPage() {
 
           <Link
             href="/vocabulary"
-            className="bg-white rounded-2xl p-5 flex flex-col gap-2 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+            className="bg-white rounded-2xl p-5 flex flex-col gap-2 border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all"
           >
             <p className="text-xs text-[#57C0F3] font-medium">VOCABULARY</p>
             <p className="text-sm text-[#1A1A1A] font-bold">単語帳</p>
@@ -78,7 +78,7 @@ export default function MainPage() {
 
           <Link
             href="/sunabaco?demo=true"
-            className="bg-[#1A1A1A] rounded-2xl p-5 flex flex-col gap-2 hover:opacity-90 transition-opacity"
+            className="bg-[#1A1A1A] rounded-2xl p-5 flex flex-col gap-2 hover:-translate-y-1 hover:shadow-lg transition-all"
           >
             <p className="text-xs text-[#F5D000] font-medium">SUNABACO</p>
             <p className="text-sm text-white font-bold">デモ</p>

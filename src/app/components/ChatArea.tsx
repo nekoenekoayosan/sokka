@@ -85,7 +85,7 @@ export default function ChatArea({
       {/* ターン進捗バー */}
       <div className="w-full h-1 bg-gray-100 rounded-full">
         <div
-          className="h-1 bg-[#1B4FD8] rounded-full transition-all"
+          className="h-1 bg-[#57C0F3] rounded-full transition-all"
           style={{ width: `${(turn / maxTurns) * 100}%` }}
         />
       </div>
@@ -95,12 +95,13 @@ export default function ChatArea({
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in-up`}
+            style={{ animationDelay: `${i * 0.1}s` }}
           >
             <div
               className={`max-w-[90%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
                 msg.role === 'user'
-                  ? 'bg-[#1B4FD8] text-white rounded-br-sm'
+                  ? 'bg-[#57C0F3] text-white rounded-br-sm'
                   : 'bg-white border border-gray-100 text-[#1A1A1A] rounded-bl-sm shadow-sm'
               }`}
             >
@@ -153,12 +154,12 @@ export default function ChatArea({
             }}
             placeholder="返答を入力..."
             disabled={isSending}
-            className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#1B4FD8]/30 transition disabled:opacity-50"
+            className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/30 transition disabled:opacity-50"
           />
           <button
             onClick={() => onSend(inputValue)}
             disabled={!inputValue.trim() || isSending}
-            className="bg-[#1B4FD8] text-white px-5 rounded-xl text-sm font-medium disabled:opacity-40 hover:bg-[#1541b8] transition-colors"
+            className="bg-[#57C0F3] text-white px-5 rounded-xl text-sm font-medium disabled:opacity-40 hover:bg-[#3aaee0] transition-colors"
           >
             {isSending ? '...' : '送信'}
           </button>
