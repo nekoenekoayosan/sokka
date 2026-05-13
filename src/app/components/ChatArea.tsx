@@ -141,25 +141,19 @@ export default function ChatArea({
 
       {/* 入力エリア（最終ターン以外） */}
       {!isLast && (
-        <div className="flex gap-2">
-          <input
-            type="text"
+        <div className="flex flex-col gap-2">
+          <textarea
             value={inputValue}
             onChange={(e) => onInputChange(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey && inputValue.trim()) {
-                e.preventDefault();
-                onSend(inputValue);
-              }
-            }}
             placeholder="返答を入力..."
+            rows={3}
             disabled={isSending}
-            className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/30 transition disabled:opacity-50"
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#888888] resize-none focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/30 transition disabled:opacity-50"
           />
           <button
             onClick={() => onSend(inputValue)}
             disabled={!inputValue.trim() || isSending}
-            className="bg-[#57C0F3] text-white px-5 rounded-xl text-sm font-medium disabled:opacity-40 hover:bg-[#3aaee0] transition-colors"
+            className="self-end bg-[#57C0F3] text-white px-8 py-2.5 rounded-full text-sm font-medium disabled:opacity-40 hover:bg-[#3aaee0] transition-colors"
           >
             {isSending ? '...' : '送信'}
           </button>
