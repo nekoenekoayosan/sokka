@@ -82,6 +82,13 @@ export default function Header({ onLogoClick, sunabacoLabel, isSunabaco = false 
           >
             <span className="w-5 text-center">📝</span>単語帳
           </Link>
+          <Link
+            href="/notes"
+            className="flex items-center gap-3 px-5 py-3 text-sm text-[#1A1A1A] hover:bg-gray-50 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            <span className="w-5 text-center">🌱</span>マイノート
+          </Link>
           <div className="border-t border-gray-100 my-1" />
           {user ? (
             <>
