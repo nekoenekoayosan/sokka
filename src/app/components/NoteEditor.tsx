@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { supabaseBrowser } from '@/lib/supabase-browser';
 
 interface NoteEditorProps {
@@ -27,6 +27,15 @@ const COLORS = [
 export default function NoteEditor({ content, onChange }: NoteEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const initializedRef = useRef(false);
+
+  // 初回のみcontentを反映
+  useEffect(() => {
+    if (editorRef.current && !initializedRef.current) {
+      editorRef.current.innerHTML = content;
+      initializedRef.current = true;
+    }
+  }, [content]);
 
   const execCommand = (command: string, value?: string) => {
     document.execCommand(command, false, value);
@@ -140,7 +149,6 @@ export default function NoteEditor({ content, onChange }: NoteEditorProps) {
         ref={editorRef}
         contentEditable
         onInput={handleInput}
-        dangerouslySetInnerHTML={{ __html: content }}
         className="min-h-[300px] bg-white rounded-2xl border border-gray-100 shadow-sm p-5 text-sm text-[#1A1A1A] leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#57C0F3]/40 transition"
         style={{ wordBreak: 'break-word' }}
       />
